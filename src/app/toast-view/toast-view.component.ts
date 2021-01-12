@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+
+import { Toast } from '../store/toast';
 
 @Component({
   selector: 'snuff-toast-view',
@@ -6,6 +8,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./toast-view.component.scss']
 })
 export class ToastViewComponent implements OnInit {
+
+  @Input() public toast: Toast;
 
   constructor() { }
 

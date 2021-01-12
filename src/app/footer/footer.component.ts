@@ -1,15 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 
+import { ToastService } from '../toast.service';
+
 @Component({
   selector: 'snuff-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']
 })
-export class FooterComponent implements OnInit {
+export class FooterComponent {
 
-  constructor() { }
+  constructor(
+    private toastService: ToastService
+  ) { }
 
-  ngOnInit(): void {
+  public openRandomToast(): void {
+    this.toastService.nextToast();
   }
 
 }
