@@ -44,3 +44,7 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+@mixin primary-background {
+  background-color: mat-color($SnuffToast-primary);
+}
