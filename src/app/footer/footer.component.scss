@@ -3,4 +3,20 @@
   padding: 1rem;
   align-items: center;
   justify-content: center;
+
+  .button {
+    transition: all 500ms ease-in-out;
+    &:active {
+      transform: scale(0.8);
+    }
+  }
+}
+
+@keyframes click-animation {
+  0% {
+    rotate: 0deg;
+  }
+  100% {
+    rotate: 180deg;
+  }
 }

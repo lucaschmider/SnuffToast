@@ -8,8 +8,8 @@ import { ToastService } from "./toast.service";
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
   animations: [
-    zoomInOnEnterAnimation(),
-    zoomOutOnLeaveAnimation()
+    zoomInOnEnterAnimation({ duration: 250 }),
+    zoomOutOnLeaveAnimation({ duration: 250 })
   ]
 })
 export class AppComponent {
