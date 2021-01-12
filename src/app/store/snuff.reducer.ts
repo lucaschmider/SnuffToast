@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { loadToastsSuccess, selectToast } from "./snuff.actions";
+import { delayRandomToast, loadToastsSuccess, selectToast } from "./snuff.actions";
 
 import { SnuffState } from "./snuff.state";
 
@@ -12,5 +12,6 @@ export const initialState: SnuffState = {
 export const snuffReducer = createReducer(
     initialState,
     on(loadToastsSuccess, (state, { toasts }) => ({ ...state, toasts })),
-    on(selectToast, (state, { toast }) => ({ ...state, currentToast: toast }))
+    on(selectToast, (state, { toast }) => ({ ...state, currentToast: toast })),
+    on(delayRandomToast, (state) => ({ ...state, currentToast: undefined }))
 );

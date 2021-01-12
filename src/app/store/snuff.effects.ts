@@ -1,6 +1,6 @@
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { catchError, map, switchMap, take, tap, withLatestFrom } from "rxjs/operators";
-import { loadToasts, loadToastsFailure, loadToastsSuccess, openRandomToast, selectToast } from "./snuff.actions";
+import { catchError, delay, map, switchMap, take, tap, withLatestFrom } from "rxjs/operators";
+import { delayRandomToast, loadToasts, loadToastsFailure, loadToastsSuccess, openRandomToast, selectToast } from "./snuff.actions";
 
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
@@ -24,8 +24,14 @@ export class SnuffEffects {
         withLatestFrom(this.store.select(selectToastCount)),
         map(([_, count]) => {
             var randomIndex = Math.floor(Math.random() * count + 1);
-            return selectToast({ toast: randomIndex });
+            return delayRandomToast({ toast: randomIndex });
         })
+    ));
+
+    public delayRandomToast$ = createEffect(() => this.actions$.pipe(
+        ofType(delayRandomToast),
+        delay(500),
+        map(({ toast }) => selectToast({ toast }))
     ));
 
     constructor(

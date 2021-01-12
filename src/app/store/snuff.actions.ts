@@ -24,3 +24,8 @@ export const selectToast = createAction(
     "[Snuff] select toast",
     props<{ toast: number }>()
 );
+
+export const delayRandomToast = createAction(
+    "[Snuff] delay toast",
+    props<{ toast: number }>()
+);
