@@ -120,10 +120,10 @@
     ora "4.0.4"
     rxjs "6.5.5"
 
-"@angular/animations@~10.0.2":
-  version "10.0.14"
-  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-10.0.14.tgz#8e7fa9b26c70cf8e67ec0cc943211eb3957dda8c"
-  integrity sha512-0BOGQOuaudIG0pq6FAnG55teKM7tEQZdIwdoOf0okhh9n0cFWSWRUjvUxWt25bWswlO+HxELyJioiRUvVSES4g==
+"@angular/animations@^11.0.8":
+  version "11.0.8"
+  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-11.0.8.tgz#abb3a016bc9164176d1edfcbd2783cc3ba6f9ca3"
+  integrity sha512-LlKR5bO7WsykZGcPDnL7c4q2/eq2fqywD+KMw5FemGLI8mN1mnq30br9/8TgaFwY0Do1OTOUh1JSrn1ybQgTwA==
   dependencies:
     tslib "^2.0.0"
 
@@ -234,6 +234,13 @@
   version "10.0.14"
   resolved "https://registry.yarnpkg.com/@angular/router/-/router-10.0.14.tgz#e8942e93a8154e1be749e1f9d79afa5f7b5b9cb9"
   integrity sha512-VWzaNyPZDY99TMszV1GlXJgVOxXsjhJrsv3mIcjaz1dfdlKOeKTVDLdnyXfP9CkwE3PRmvG7eSXppIj6nn9BpQ==
+  dependencies:
+    tslib "^2.0.0"
+
+"@angular/service-worker@~10.0.2":
+  version "10.0.14"
+  resolved "https://registry.yarnpkg.com/@angular/service-worker/-/service-worker-10.0.14.tgz#c02fef1e247574c1966d2e5c2424d2675c875c87"
+  integrity sha512-/oXyXRC+LFuKACcItG7EJaHe0D24x6KIyh3jg1TkClqWQe0rfVtvcYq+Fday69+gdZOM6euMWjBMoJqXJP7PcA==
   dependencies:
     tslib "^2.0.0"
 
@@ -1435,6 +1442,13 @@ alphanum-sort@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/alphanum-sort/-/alphanum-sort-1.0.2.tgz#97a1119649b211ad33691d9f9f486a8ec9fbe0a3"
   integrity sha1-l6ERlkmyEa0zaR2fn0hqjsn74KM=
+
+angular-animations@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/angular-animations/-/angular-animations-0.11.0.tgz#1c36cad9e280c0d9b4ad5fe61a1ddeee517a6a6e"
+  integrity sha512-P2RuOe+T97bhgGDLtOYK9V45QA5y+kFUxoJfRAua8Ymo0bI5lWyw8oiVmBoEIZUU+nooYoJvQXgVKuZJA7/z3g==
+  dependencies:
+    tslib "^2.0.0"
 
 ansi-colors@4.1.1:
   version "4.1.1"
