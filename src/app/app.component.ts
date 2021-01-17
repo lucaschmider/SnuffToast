@@ -1,4 +1,4 @@
-import { zoomInOnEnterAnimation, zoomOutOnLeaveAnimation } from 'angular-animations';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 import { Component } from '@angular/core';
 import { ToastService } from "./toast.service";
@@ -8,8 +8,12 @@ import { ToastService } from "./toast.service";
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
   animations: [
-    zoomInOnEnterAnimation({ duration: 250 }),
-    zoomOutOnLeaveAnimation({ duration: 250 })
+    trigger("fadeOut", [
+      transition(":leave", [
+        style({ opacity: 1 }),
+        animate("500ms ease", style({ opacity: 0, transform: "scale(0.5) translateY(10rem)" }))
+      ])
+    ])
   ]
 })
 export class AppComponent {

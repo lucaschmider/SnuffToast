@@ -15,12 +15,14 @@ import { StoreModule } from '@ngrx/store';
 import { ToastViewComponent } from './toast-view/toast-view.component';
 import { environment } from '../environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { HeaderComponent } from './header/header.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     FooterComponent,
-    ToastViewComponent
+    ToastViewComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,5 @@
-<div id="wrapper" *ngIf="toastService.currentToasts$ | async as currentToasts" [@zoomInOnEnter] [@zoomOutOnLeave]>
+<div id="wrapper" *ngIf="toastService.currentToasts$ | async as currentToasts">
     <snuff-toast-view *ngFor="let toast of currentToasts; let i = index" [toast]="toast"
-        [ngStyle]="calculateStyles(i, currentToasts.length)"></snuff-toast-view>
+        [ngStyle]="calculateStyles(i, currentToasts.length)" [@fadeOut]></snuff-toast-view>
 </div>
 <snuff-footer id="footer"></snuff-footer>
