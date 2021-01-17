@@ -13,8 +13,12 @@ export class FooterComponent {
     private toastService: ToastService
   ) { }
 
-  public openRandomToast(): void {
-    this.toastService.nextToast();
+  public likeToast(): void {
+    this.toastService.like();
+  }
+
+  public dislikeToast(): void {
+    this.toastService.dislike();
   }
 
 }

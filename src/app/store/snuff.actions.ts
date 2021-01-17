@@ -16,16 +16,20 @@ export const loadToastsFailure = createAction(
     props<{ error: any }>()
 );
 
-export const openRandomToast = createAction(
-    "[Snuff] pries"
+export const refillStack = createAction(
+    "[Snuff] refill stack",
+    props<{ amount: number }>()
+)
+
+export const addToastsToStack = createAction(
+    "[Snuff] add toast to stack",
+    props<{ toasts: number[] }>()
 );
 
-export const selectToast = createAction(
-    "[Snuff] select toast",
-    props<{ toast: number }>()
+export const likeToast = createAction(
+    "[Snuff] like toast"
 );
 
-export const delayRandomToast = createAction(
-    "[Snuff] delay toast",
-    props<{ toast: number }>()
+export const dislikeToast = createAction(
+    "[Snuff] dislike toast"
 );

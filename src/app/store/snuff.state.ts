@@ -2,5 +2,6 @@ import { Toast } from "./toast";
 
 export interface SnuffState {
     toasts: Toast[],
-    currentToast?: number
+    displayedToasts: number[],
+    favourites: number[]
 }

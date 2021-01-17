@@ -1,4 +1,4 @@
-<div id="wrapper" *ngIf="toastService.currentToast$ | async as currentToast" [@zoomInOnEnter] [@zoomOutOnLeave]>
-    <snuff-toast-view [toast]="currentToast"></snuff-toast-view>
+<div id="wrapper" *ngIf="toastService.currentToasts$ | async as currentToasts" [@zoomInOnEnter] [@zoomOutOnLeave]>
+    <snuff-toast-view *ngFor="let toast of currentToasts" [toast]="toast"></snuff-toast-view>
 </div>
 <snuff-footer id="footer"></snuff-footer>

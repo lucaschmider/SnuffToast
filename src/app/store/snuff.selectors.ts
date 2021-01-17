@@ -8,7 +8,7 @@ export const selectToastCount = createSelector(
     selectFeature,
     (state) => state.toasts?.length ?? 0
 );
-export const selectCurrentToast = createSelector(
+export const selectCurrentToasts = createSelector(
     selectFeature,
-    (state) => state.toasts[state.currentToast]
+    (state) => state.displayedToasts.map(index => state.toasts[index])
 );

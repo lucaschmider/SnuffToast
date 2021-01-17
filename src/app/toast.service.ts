@@ -1,6 +1,6 @@
 import * as fromSnuff from "./store/snuff.selectors";
 
-import { loadToasts, openRandomToast } from "./store/snuff.actions";
+import { dislikeToast, likeToast, loadToasts } from "./store/snuff.actions";
 
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -11,7 +11,7 @@ import { Toast } from "./store/toast";
   providedIn: 'root'
 })
 export class ToastService {
-  public currentToast$: Observable<Toast> = this.store.select(fromSnuff.selectCurrentToast);
+  public currentToasts$: Observable<Toast[]> = this.store.select(fromSnuff.selectCurrentToasts);
   constructor(
     private store: Store
   ) { }
@@ -20,7 +20,11 @@ export class ToastService {
     this.store.dispatch(loadToasts());
   }
 
-  public nextToast(): void {
-    this.store.dispatch(openRandomToast());
+  public like(): void {
+    this.store.dispatch(likeToast());
+  }
+
+  public dislike(): void {
+    this.store.dispatch(dislikeToast());
   }
 }
