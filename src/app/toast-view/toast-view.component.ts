@@ -16,4 +16,5 @@ export class ToastViewComponent implements OnInit {
   ngOnInit(): void {
   }
 
+
 }

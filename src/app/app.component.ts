@@ -18,4 +18,15 @@ export class AppComponent {
   ) {
     toastService.initializeData();
   }
+
+  public calculateStyles(index: number, totalCount: number): { "z-index": number, "transform": string, "filter": string } {
+    const scaleClause = `scale(${(10 - index) / 10})`;
+    const translateClause = `translateY(${-index * 3}rem)`;
+
+    return {
+      "z-index": totalCount - index,
+      transform: `${scaleClause} ${translateClause}`,
+      filter: `brightness(${(totalCount - index) / totalCount})`
+    };
+  }
 }
