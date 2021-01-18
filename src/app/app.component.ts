@@ -3,7 +3,8 @@ import { animate, state, style, transition, trigger } from "@angular/animations"
 import { Component } from "@angular/core";
 import { ToastService } from "./toast.service";
 
-export function calculateStyles(index: number, totalCount: number): { "z-index": number, "transform": string, "filter": string } {
+export function calculateStyles(index: number, totalCount: number): { "z-index": number, "transform"?: string, "filter"?: string } {
+  if (index === 0) return { "z-index": totalCount - index };
   const scaleClause = `scale(${(10 - index) / 10})`;
   const translateClause = `translateY(${-index * 3}rem)`;
 
@@ -35,11 +36,44 @@ export function calculateStyles(index: number, totalCount: number): { "z-index":
   ]
 })
 export class AppComponent {
+  private firstOffset: {
+    x: number,
+    y: number
+  } = { x: 0, y: 0 };
+
   constructor(
     public toastService: ToastService
   ) {
     toastService.initializeData();
   }
 
+  public getStyles(index: number): { transform: string } {
+    if (index !== 0) return;
+
+    return {
+      transform: `translate(${this.firstOffset.x}px, ${this.firstOffset.y}px) rotateZ(${this.firstOffset.x * 120 / (2 * window.innerWidth)}deg)`
+    };
+  }
+
+  public onPan(index: number, { deltaX, deltaY }: any): void {
+    if (index !== 0) return;
+    this.firstOffset = { x: deltaX, y: deltaY };
+  }
+
+  public onPanEnd(index: number, event: any): void {
+    if (index !== 0 || event?.deltaX === undefined) return;
+
+    if (Math.abs(event.deltaX) < 0.3 * window.innerWidth) {
+      this.firstOffset = { x: 0, y: 0 };
+      return;
+    }
+
+    if (event.deltaX < 0) {
+      this.toastService.like();
+    } else {
+      this.toastService.dislike();
+    }
+
+  }
 
 }

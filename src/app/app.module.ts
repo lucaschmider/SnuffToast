@@ -1,9 +1,9 @@
 import { ActionReducer, MetaReducer, StoreModule } from "@ngrx/store";
+import { BrowserModule, HammerModule } from "@angular/platform-browser";
 import { featureKey, snuffReducer } from "./store/snuff.reducer";
 
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { BrowserModule } from "@angular/platform-browser";
 import { EffectsModule } from "@ngrx/effects";
 import { FooterComponent } from "./footer/footer.component";
 import { HeaderComponent } from "./header/header.component";
@@ -40,6 +40,7 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     HttpClientModule,
     MatButtonModule,
     MatIconModule,
+    HammerModule,
     ServiceWorkerModule.register("ngsw-worker.js", { enabled: environment.production })
   ],
   providers: [],
