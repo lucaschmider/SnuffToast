@@ -27,3 +27,8 @@ export const selectIsInitialized = createSelector(
     selectFeature,
     (state) => state.toasts !== undefined && state.toasts.length > 0
 );
+
+export const selectDisplayedToastCount = createSelector(
+    selectFeature,
+    (state) => state.displayedToasts.length
+);

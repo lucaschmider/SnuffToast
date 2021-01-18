@@ -1,7 +1,7 @@
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { addToastsToStack, dislikeToast, likeToast, loadToasts, loadToastsFailure, loadToastsSuccess, refillStack, toggleFavouriteMode } from "./snuff.actions";
 import { catchError, filter, map, switchMap, withLatestFrom } from "rxjs/operators";
-import { selectFavourites, selectIsFavouriteOnlyMode, selectIsInitialized, selectToastCount } from "./snuff.selectors";
+import { selectDisplayedToastCount, selectFavourites, selectIsFavouriteOnlyMode, selectIsInitialized, selectToastCount } from "./snuff.selectors";
 
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
@@ -26,13 +26,14 @@ export class SnuffEffects {
         withLatestFrom(
             this.store.select(selectToastCount),
             this.store.select(selectIsFavouriteOnlyMode),
-            this.store.select(selectFavourites)
+            this.store.select(selectFavourites),
+            this.store.select(selectDisplayedToastCount)
         ),
-        map(([{ amount }, count, isFavouriteOnlyMode, favourites]) => {
+        map(([{ amount }, availableToastCount, isFavouriteOnlyMode, favourites, displayedToastCount]) => {
             var indexes = [] as number[];
 
-            for (let index = 0; index < amount; index++) {
-                var randomIndex = Math.floor(Math.random() * count);
+            for (let index = 0; index < (5 - displayedToastCount); index++) {
+                var randomIndex = Math.floor(Math.random() * availableToastCount);
                 indexes.push(isFavouriteOnlyMode ? favourites[randomIndex] : randomIndex);
             }
 
