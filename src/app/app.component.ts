@@ -1,6 +1,8 @@
+import { Component, OnDestroy } from "@angular/core";
 import { animate, state, style, transition, trigger } from "@angular/animations";
+import { takeUntil, tap } from "rxjs/operators";
 
-import { Component } from "@angular/core";
+import { Subject } from "rxjs";
 import { ToastService } from "./toast.service";
 
 export function calculateStyles(index: number, totalCount: number): { "z-index": number, "transform"?: string, "filter"?: string } {
@@ -35,16 +37,28 @@ export function calculateStyles(index: number, totalCount: number): { "z-index":
     ])
   ]
 })
-export class AppComponent {
+export class AppComponent implements OnDestroy {
   private firstOffset: {
     x: number,
     y: number
   } = { x: 0, y: 0 };
 
+  private readonly destroy$ = new Subject();
+
   constructor(
-    public toastService: ToastService
+    public readonly toastService: ToastService
   ) {
     toastService.initializeData();
+
+    this.toastService.isFavouriteOnlyMode$.pipe(
+      tap(() => this.firstOffset = { x: 0, y: 0 }),
+      takeUntil(this.destroy$)
+    ).subscribe();
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   public getStyles(index: number): { transform: string } {
