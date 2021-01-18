@@ -1,13 +1,13 @@
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { addToastsToStack, dislikeToast, likeToast, loadToasts, loadToastsFailure, loadToastsSuccess, refillStack } from "./snuff.actions";
+import { addToastsToStack, dislikeToast, likeToast, loadToasts, loadToastsFailure, loadToastsSuccess, refillStack, toggleFavouriteMode } from "./snuff.actions";
 import { catchError, delay, map, switchMap, take, tap, withLatestFrom } from "rxjs/operators";
+import { selectFavourites, selectIsFavouriteOnlyMode, selectToastCount } from "./snuff.selectors";
 
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { Toast } from "./toast";
 import { of } from "rxjs";
-import { selectToastCount } from "./snuff.selectors";
 
 @Injectable()
 export class SnuffEffects {
@@ -21,12 +21,19 @@ export class SnuffEffects {
 
     public refillStack$ = createEffect(() => this.actions$.pipe(
         ofType(refillStack),
-        withLatestFrom(this.store.select(selectToastCount)),
-        map(([{ amount }, count]) => {
+        withLatestFrom(
+            this.store.select(selectToastCount),
+            this.store.select(selectIsFavouriteOnlyMode),
+            this.store.select(selectFavourites)
+        ),
+        map(([{ amount }, count, isFavouriteOnlyMode, favourites]) => {
             var indexes = [] as number[];
+
             for (let index = 0; index < amount; index++) {
-                indexes.push(Math.floor(Math.random() * count + 1));
+                var randomIndex = Math.floor(Math.random() * count);
+                indexes.push(isFavouriteOnlyMode ? favourites[randomIndex] : randomIndex);
             }
+
             return addToastsToStack({ toasts: indexes });
         })
     ));
@@ -34,6 +41,11 @@ export class SnuffEffects {
     public readonly handleToastConsumption$ = createEffect(() => this.actions$.pipe(
         ofType(likeToast, dislikeToast),
         map(() => refillStack({ amount: 1 }))
+    ));
+
+    public readonly handleModeSwitch$ = createEffect(() => this.actions$.pipe(
+        ofType(toggleFavouriteMode),
+        map(() => refillStack({ amount: 5 }))
     ));
 
     constructor(

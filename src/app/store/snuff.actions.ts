@@ -33,3 +33,7 @@ export const likeToast = createAction(
 export const dislikeToast = createAction(
     "[Snuff] dislike toast"
 );
+
+export const toggleFavouriteMode = createAction(
+    "[Snuff] toggle favourite only mode"
+);
