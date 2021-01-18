@@ -1,7 +1,7 @@
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { addToastsToStack, dislikeToast, likeToast, loadToasts, loadToastsFailure, loadToastsSuccess, refillStack, toggleFavouriteMode } from "./snuff.actions";
-import { catchError, delay, map, switchMap, take, tap, withLatestFrom } from "rxjs/operators";
-import { selectFavourites, selectIsFavouriteOnlyMode, selectToastCount } from "./snuff.selectors";
+import { catchError, filter, map, switchMap, withLatestFrom } from "rxjs/operators";
+import { selectFavourites, selectIsFavouriteOnlyMode, selectIsInitialized, selectToastCount } from "./snuff.selectors";
 
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
@@ -14,6 +14,8 @@ export class SnuffEffects {
 
     public loadToasts$ = createEffect(() => this.actions$.pipe(
         ofType(loadToasts),
+        withLatestFrom(this.store.select(selectIsInitialized)),
+        filter(([_, isInitialized]) => !isInitialized),
         switchMap(() => this.httpClient.get<Toast[]>("/assets/toasts.json")),
         switchMap((toasts) => ([loadToastsSuccess({ toasts }), refillStack({ amount: 5 })])),
         catchError((error) => of(loadToastsFailure({ error })))

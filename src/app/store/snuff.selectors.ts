@@ -22,3 +22,8 @@ export const selectFavourites = createSelector(
     selectFeature,
     (state) => state.favourites
 );
+
+export const selectIsInitialized = createSelector(
+    selectFeature,
+    (state) => state.toasts !== undefined && state.toasts.length > 0
+);
