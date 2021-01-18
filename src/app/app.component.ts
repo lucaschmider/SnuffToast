@@ -1,10 +1,10 @@
-import { animate, style, transition, trigger } from '@angular/animations';
+import { animate, style, transition, trigger } from "@angular/animations";
 
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 import { ToastService } from "./toast.service";
 
 @Component({
-  selector: 'snuff-root',
+  selector: "snuff-root",
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
   animations: [

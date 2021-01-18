@@ -2,13 +2,13 @@ import * as fromSnuff from "./store/snuff.selectors";
 
 import { dislikeToast, likeToast, loadToasts, toggleFavouriteMode } from "./store/snuff.actions";
 
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
 import { Store } from "@ngrx/store";
 import { Toast } from "./store/toast";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class ToastService {
   public currentToasts$: Observable<Toast[]> = this.store.select(fromSnuff.selectCurrentToasts);

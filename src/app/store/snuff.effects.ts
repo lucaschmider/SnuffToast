@@ -17,7 +17,7 @@ export class SnuffEffects {
         withLatestFrom(this.store.select(selectIsInitialized)),
         filter(([_, isInitialized]) => !isInitialized),
         switchMap(() => this.httpClient.get<Toast[]>("/assets/toasts.json")),
-        switchMap((toasts) => ([loadToastsSuccess({ toasts }), refillStack({ amount: 5 })])),
+        switchMap((toasts) => ([loadToastsSuccess({ toasts }), refillStack()])),
         catchError((error) => of(loadToastsFailure({ error })))
     ));
 
@@ -29,7 +29,7 @@ export class SnuffEffects {
             this.store.select(selectFavourites),
             this.store.select(selectDisplayedToastCount)
         ),
-        map(([{ amount }, availableToastCount, isFavouriteOnlyMode, favourites, displayedToastCount]) => {
+        map(([_, availableToastCount, isFavouriteOnlyMode, favourites, displayedToastCount]) => {
             var indexes = [] as number[];
 
             for (let index = 0; index < (5 - displayedToastCount); index++) {
@@ -43,12 +43,12 @@ export class SnuffEffects {
 
     public readonly handleToastConsumption$ = createEffect(() => this.actions$.pipe(
         ofType(likeToast, dislikeToast),
-        map(() => refillStack({ amount: 1 }))
+        map(() => refillStack())
     ));
 
     public readonly handleModeSwitch$ = createEffect(() => this.actions$.pipe(
         ofType(toggleFavouriteMode),
-        map(() => refillStack({ amount: 5 }))
+        map(() => refillStack())
     ));
 
     constructor(

@@ -17,9 +17,8 @@ export const loadToastsFailure = createAction(
 );
 
 export const refillStack = createAction(
-    "[Snuff] refill stack",
-    props<{ amount: number }>()
-)
+    "[Snuff] refill stack"
+);
 
 export const addToastsToStack = createAction(
     "[Snuff] add toast to stack",

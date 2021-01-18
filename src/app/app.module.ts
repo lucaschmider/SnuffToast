@@ -1,22 +1,22 @@
-import { ActionReducer, MetaReducer, StoreModule } from '@ngrx/store';
+import { ActionReducer, MetaReducer, StoreModule } from "@ngrx/store";
 import { featureKey, snuffReducer } from "./store/snuff.reducer";
 
-import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { BrowserModule } from '@angular/platform-browser';
-import { EffectsModule } from '@ngrx/effects';
-import { FooterComponent } from './footer/footer.component';
-import { HeaderComponent } from './header/header.component';
+import { AppComponent } from "./app.component";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { BrowserModule } from "@angular/platform-browser";
+import { EffectsModule } from "@ngrx/effects";
+import { FooterComponent } from "./footer/footer.component";
+import { HeaderComponent } from "./header/header.component";
 import { HttpClientModule } from "@angular/common/http";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
-import { NgModule } from '@angular/core';
-import { ServiceWorkerModule } from '@angular/service-worker';
+import { NgModule } from "@angular/core";
+import { ServiceWorkerModule } from "@angular/service-worker";
 import { SnuffEffects } from "./store/snuff.effects";
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { ToastViewComponent } from './toast-view/toast-view.component';
-import { environment } from '../environments/environment';
-import { localStorageSync } from 'ngrx-store-localstorage';
+import { StoreDevtoolsModule } from "@ngrx/store-devtools";
+import { ToastViewComponent } from "./toast-view/toast-view.component";
+import { environment } from "../environments/environment";
+import { localStorageSync } from "ngrx-store-localstorage";
 
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
   return localStorageSync({ keys: [featureKey], rehydrate: true })(reducer);
@@ -40,7 +40,7 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     HttpClientModule,
     MatButtonModule,
     MatIconModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register("ngsw-worker.js", { enabled: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]

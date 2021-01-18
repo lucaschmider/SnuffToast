@@ -1,14 +1,14 @@
-import { animate, animation, style, transition, trigger } from '@angular/animations';
+import { animate, animation, style, transition, trigger } from "@angular/animations";
 
-import { Component } from '@angular/core';
-import { ToastService } from '../toast.service';
-import { combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Component } from "@angular/core";
+import { ToastService } from "../toast.service";
+import { combineLatest } from "rxjs";
+import { map } from "rxjs/operators";
 
 @Component({
-  selector: 'snuff-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
+  selector: "snuff-header",
+  templateUrl: "./header.component.html",
+  styleUrls: ["./header.component.scss"],
   animations: [
     trigger("zoom", [
       transition(":enter", [
