@@ -13,6 +13,7 @@ import { Toast } from "./store/toast";
 export class ToastService {
   public currentToasts$: Observable<Toast[]> = this.store.select(fromSnuff.selectCurrentToasts);
   public isFavouriteOnlyMode$: Observable<boolean> = this.store.select(fromSnuff.selectIsFavouriteOnlyMode);
+  public favourites$: Observable<number[]> = this.store.select(fromSnuff.selectFavourites);
 
   constructor(
     private store: Store

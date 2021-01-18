@@ -1,3 +1,5 @@
-<button mat-fab class="button" *ngIf="mode$ | async as mode" (click)="toggleFavouriteOnlyMode()">
-    <mat-icon>{{mode.isFavouriteOnlyMode ? "favorite" : "favorite_border"}}</mat-icon>
-</button>
+<ng-container *ngIf="mode$ | async as mode">
+    <button mat-fab class="button" *ngIf="mode.showButton" [@zoom] (click)="toggleFavouriteOnlyMode()">
+        <mat-icon>{{mode.isFavouriteOnlyMode ? "favorite" : "favorite_border"}}</mat-icon>
+    </button>
+</ng-container>
