@@ -1,35 +1,33 @@
-import { addToastsToStack, dislikeToast, likeToast, loadToastsSuccess, toggleFavouriteMode } from "./snuff.actions";
 import { createReducer, on } from "@ngrx/store";
+import { dislikeToast, likeToast, loadToastsSuccess, nextIndex, setRandomizeOrder, toggleFavouriteMode } from "./snuff.actions";
 
 import { SnuffState } from "./snuff.state";
+import { calculateDisplayedToastCount } from "./snuff.selectors";
 
-export const featureKey = "Snuff";
 export const initialState: SnuffState = {
     toasts: [],
-    displayedToasts: [],
     favourites: [],
-    favouritesOnly: false
+    favouritesOnly: false,
+    index: 0,
+    regularOrder: [],
+    targetCardCount: 5
 };
 
 export const snuffReducer = createReducer(
     initialState,
     on(loadToastsSuccess, (state, { toasts }) => ({ ...state, toasts })),
-    on(addToastsToStack, (state, { toasts }) => ({ ...state, displayedToasts: [...state.displayedToasts, ...toasts] })),
-    on(likeToast, (state) => {
-        const newFavourites = [...state.favourites];
-        if (!state.favouritesOnly) newFavourites.push(state.displayedToasts[0]);
-
-        return {
-            ...state,
-            displayedToasts: state.displayedToasts.filter((_, index) => index > 0),
-            favourites: newFavourites
-        };
-    }),
-    on(dislikeToast, ({ displayedToasts, favourites, toasts, favouritesOnly }) => ({
-        toasts,
-        displayedToasts: displayedToasts.filter((toast, index) => index > 0 && toast !== displayedToasts[0]),
-        favourites: favouritesOnly ? favourites.filter((_, index) => index > 0) : favourites,
-        favouritesOnly: favouritesOnly && favourites.length > 1
+    on(nextIndex, (state) => ({ ...state, index: state.index < (calculateAvailableToastsInCurrentMode(state) - 1) ? state.index + 1 : 0 })),
+    on(likeToast, (state) => ({
+        ...state,
+        favourites: state.favouritesOnly ? state.favourites : [...state.favourites, state.regularOrder[state.index]]
     })),
-    on(toggleFavouriteMode, (state) => ({ ...state, favouritesOnly: !state.favouritesOnly, displayedToasts: [] }))
+    on(dislikeToast, (state) => ({
+        ...state,
+        favouritesOnly: state.favouritesOnly && state.favourites.length > 1,
+        favourites: state.favouritesOnly ? state.favourites.filter((_, index) => state.index !== index) : state.favourites
+    })),
+    on(toggleFavouriteMode, (state) => ({ ...state, favouritesOnly: !state.favouritesOnly, index: 0 })),
+    on(setRandomizeOrder, (state, { favouritesOrder, generalOrder }) => ({ ...state, favourites: favouritesOrder, regularOrder: generalOrder }))
 );
+
+export const calculateAvailableToastsInCurrentMode = ({ favouritesOnly, favourites, regularOrder }: SnuffState) => (favouritesOnly ? favourites : regularOrder).length

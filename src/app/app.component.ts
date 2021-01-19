@@ -44,9 +44,13 @@ export class AppComponent implements OnDestroy {
   } = { x: 0, y: 0 };
 
   private readonly destroy$ = new Subject();
+  public readonly displayedToasts$ = this.toastService.currentToasts$.pipe(
+    tap(console.log),
+    tap(() => this.firstOffset = { x: 0, y: 0 })
+  );
 
   constructor(
-    public readonly toastService: ToastService
+    private readonly toastService: ToastService
   ) {
     toastService.initializeData();
 
@@ -87,7 +91,6 @@ export class AppComponent implements OnDestroy {
     } else {
       this.toastService.dislike();
     }
-
   }
 
 }

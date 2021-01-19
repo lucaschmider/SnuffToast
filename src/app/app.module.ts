@@ -1,6 +1,5 @@
 import { ActionReducer, MetaReducer, StoreModule } from "@ngrx/store";
 import { BrowserModule, HammerModule } from "@angular/platform-browser";
-import { featureKey, snuffReducer } from "./store/snuff.reducer";
 
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -16,7 +15,9 @@ import { SnuffEffects } from "./store/snuff.effects";
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 import { ToastViewComponent } from "./toast-view/toast-view.component";
 import { environment } from "../environments/environment";
+import { featureKey } from "./store/constants";
 import { localStorageSync } from "ngrx-store-localstorage";
+import { snuffReducer } from "./store/snuff.reducer";
 
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
   return localStorageSync({ keys: [featureKey], rehydrate: true })(reducer);

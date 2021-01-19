@@ -1,11 +1,11 @@
+import { Action, Store } from "@ngrx/store";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { addToastsToStack, dislikeToast, likeToast, loadToasts, loadToastsFailure, loadToastsSuccess, refillStack, toggleFavouriteMode } from "./snuff.actions";
 import { catchError, filter, map, switchMap, withLatestFrom } from "rxjs/operators";
-import { selectDisplayedToastCount, selectFavourites, selectIsFavouriteOnlyMode, selectIsInitialized, selectToastCount } from "./snuff.selectors";
+import { dislikeToast, likeToast, loadToasts, loadToastsFailure, loadToastsSuccess, nextIndex, setRandomizeOrder, toastsAvailable, toggleFavouriteMode } from "./snuff.actions";
+import { selectAvailableToastCount, selectIsFavouriteOnlyMode, selectIsInitialized } from "./snuff.selectors";
 
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Store } from "@ngrx/store";
 import { Toast } from "./toast";
 import { of } from "rxjs";
 
@@ -15,40 +15,31 @@ export class SnuffEffects {
     public loadToasts$ = createEffect(() => this.actions$.pipe(
         ofType(loadToasts),
         withLatestFrom(this.store.select(selectIsInitialized)),
-        filter(([_, isInitialized]) => !isInitialized),
-        switchMap(() => this.httpClient.get<Toast[]>("/assets/toasts.json")),
-        switchMap((toasts) => ([loadToastsSuccess({ toasts }), refillStack()])),
+        switchMap(([_, isInitialized]) => isInitialized ? of(true) : this.httpClient.get<Toast[]>("/assets/toasts.json")),
+        switchMap((result) => {
+            const actionsToDispatch = typeof (result) === "boolean" ? [] : [loadToastsSuccess({ toasts: result })] as Action[];
+            actionsToDispatch.push(toastsAvailable())
+            return actionsToDispatch;
+        }),
         catchError((error) => of(loadToastsFailure({ error })))
     ));
 
-    public refillStack$ = createEffect(() => this.actions$.pipe(
-        ofType(refillStack),
-        withLatestFrom(
-            this.store.select(selectToastCount),
-            this.store.select(selectIsFavouriteOnlyMode),
-            this.store.select(selectFavourites),
-            this.store.select(selectDisplayedToastCount)
-        ),
-        map(([_, availableToastCount, isFavouriteOnlyMode, favourites, displayedToastCount]) => {
-            var indexes = [] as number[];
+    public readonly randomizeOrder$ = createEffect(() => this.actions$.pipe(
+        ofType(toastsAvailable),
+        withLatestFrom(this.store.select(selectAvailableToastCount)),
+        map(([_, { favouriteCount, totalCount }]) => {
+            const favouritesOrder = SnuffEffects.shuffle([...Array(favouriteCount).keys()]);
+            const generalOrder = SnuffEffects.shuffle([...Array(totalCount).keys()]);
 
-            for (let index = 0; index < (5 - displayedToastCount); index++) {
-                var randomIndex = Math.floor(Math.random() * availableToastCount);
-                indexes.push(isFavouriteOnlyMode ? favourites[randomIndex] : randomIndex);
-            }
-
-            return addToastsToStack({ toasts: indexes });
+            return setRandomizeOrder({ favouritesOrder, generalOrder });
         })
     ));
 
     public readonly handleToastConsumption$ = createEffect(() => this.actions$.pipe(
         ofType(likeToast, dislikeToast),
-        map(() => refillStack())
-    ));
-
-    public readonly handleModeSwitch$ = createEffect(() => this.actions$.pipe(
-        ofType(toggleFavouriteMode),
-        map(() => refillStack())
+        withLatestFrom(this.store.select(selectIsFavouriteOnlyMode)),
+        filter(([{ type }, isFavouriteOnlyMode]) => !isFavouriteOnlyMode || type !== dislikeToast.type),
+        map(() => nextIndex())
     ));
 
     constructor(
@@ -56,4 +47,23 @@ export class SnuffEffects {
         private httpClient: HttpClient,
         private store: Store
     ) { }
+
+    private static shuffle<T>(input: T[]): T[] {
+        var currentIndex = input.length, temporaryValue, randomIndex;
+
+        // While there remain elements to shuffle...
+        while (0 !== currentIndex) {
+
+            // Pick a remaining element...
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
+
+            // And swap it with the current element.
+            temporaryValue = input[currentIndex];
+            input[currentIndex] = input[randomIndex];
+            input[randomIndex] = temporaryValue;
+        }
+
+        return input;
+    }
 }

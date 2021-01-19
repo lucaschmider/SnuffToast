@@ -1,16 +1,35 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 
 import { SnuffState } from "./snuff.state";
-import { featureKey } from "./snuff.reducer";
+import { featureKey } from "./constants";
+import { map } from "rxjs/operators";
 
 export const selectFeature = createFeatureSelector<SnuffState>(featureKey);
 export const selectToastCount = createSelector(
     selectFeature,
     ({ favourites, favouritesOnly, toasts }) => favouritesOnly ? favourites.length : toasts.length
 );
+
+export const selectDisplayedToastCount = createSelector(
+    selectFeature,
+    (state) => calculateDisplayedToastCount(state)
+);
+
 export const selectCurrentToasts = createSelector(
     selectFeature,
-    (state) => state.displayedToasts.map(index => state.toasts[index])
+    selectDisplayedToastCount,
+    ({ favourites, favouritesOnly, toasts, index, regularOrder }, displayedToastCount) => {
+        console.log("Change");
+
+        //console.log({ favourites, favouritesOnly, toasts, index, regularOrder, displayedToastCount });
+        const targetArray = (favouritesOnly ? favourites : regularOrder);
+        //console.log(`TargetArray: ${JSON.stringify(targetArray)}`);
+        const slicedArray = targetArray.slice(index, index + displayedToastCount);
+        //console.log(`SlicedArray: ${JSON.stringify(slicedArray)}`);
+        const mappedArray = slicedArray.map(index => toasts[index])
+        //console.log(`MappedArray: ${JSON.stringify(mappedArray)}`);
+        return mappedArray;
+    }
 );
 
 export const selectIsFavouriteOnlyMode = createSelector(
@@ -28,7 +47,17 @@ export const selectIsInitialized = createSelector(
     (state) => state.toasts !== undefined && state.toasts.length > 0
 );
 
-export const selectDisplayedToastCount = createSelector(
+
+
+export const selectAvailableToastCount = createSelector(
     selectFeature,
-    (state) => state.displayedToasts.length
+    (state) => ({
+        favouriteCount: state.favourites.length,
+        totalCount: state.toasts.length
+    })
 );
+
+export const calculateDisplayedToastCount =
+    ({ targetCardCount, favourites, toasts, favouritesOnly }: SnuffState): number =>
+        Math.min(targetCardCount, (favouritesOnly ? favourites : toasts).length);
+

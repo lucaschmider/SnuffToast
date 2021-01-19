@@ -16,13 +16,13 @@ export const loadToastsFailure = createAction(
     props<{ error: any }>()
 );
 
-export const refillStack = createAction(
-    "[Snuff] refill stack"
+export const setRandomizeOrder = createAction(
+    "[Snuff] set randomized order",
+    props<{ generalOrder: number[], favouritesOrder: number[] }>()
 );
 
-export const addToastsToStack = createAction(
-    "[Snuff] add toast to stack",
-    props<{ toasts: number[] }>()
+export const nextIndex = createAction(
+    "[Snuff] next index"
 );
 
 export const likeToast = createAction(
@@ -35,4 +35,8 @@ export const dislikeToast = createAction(
 
 export const toggleFavouriteMode = createAction(
     "[Snuff] toggle favourite only mode"
+);
+
+export const toastsAvailable = createAction(
+    "[Snuff] toasts available"
 );
