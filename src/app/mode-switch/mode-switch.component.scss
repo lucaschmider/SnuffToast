@@ -7,8 +7,7 @@
 }
 
 .icon {
-  transition: 300ms;
-  transition-delay: 300ms;
+  transition: all 300ms 300ms, opacity 400ms;
   stroke: gray;
 
   &.bookmark {
@@ -37,7 +36,7 @@
   width: $grip-size * $width-multiplier;
   border-radius: $grip-size;
   background-color: rgb(194, 194, 194);
-
+  transition: opacity 400ms;
   .grip {
     background-color: white;
     border-radius: $grip-size / 2;
@@ -46,7 +45,7 @@
     box-shadow: 0 -5px 5px -3px rgb(0 0 0 / 20%),
       0 8px 10px 1px rgb(0 0 0 / 14%), 0 3px 14px 2px rgb(0 0 0 / 12%);
     cursor: pointer;
-    transition: cubic-bezier(0.5, 0, 0.5, 1) 400ms;
+    transition: all cubic-bezier(0.5, 0, 0.5, 1) 400ms, opacity 400ms;
     * {
       transition: cubic-bezier(0.5, 0, 0.5, 1) 400ms;
       stroke: styles.$accent;
@@ -63,9 +62,9 @@
       }
     }
   }
-
-  &.disabled {
-    cursor: default;
-    pointer-events: none;
-  }
+}
+.disabled {
+  cursor: default;
+  pointer-events: none;
+  opacity: 0.1;
 }
