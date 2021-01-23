@@ -28,7 +28,7 @@ export function calculateStyles(index: number, totalCount: number): { "z-index":
       state("2", style(calculateStyles(2, 5))),
       state("3", style(calculateStyles(3, 5))),
       state("4", style(calculateStyles(4, 5))),
-      state("void", style(calculateStyles(5, 5))),
+      state("void", style({ ...calculateStyles(5, 5), opacity: 0 })),
       transition(":leave", [
         style({ opacity: 1 }),
         animate("500ms linear", style({ opacity: 0, transform: "scale(0.5) translateY(10rem)" }))
