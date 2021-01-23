@@ -1,9 +1,11 @@
+import { Component, OnDestroy } from "@angular/core";
+import { Subject, combineLatest } from "rxjs";
 import { animate, animation, style, transition, trigger } from "@angular/animations";
+import { map, takeUntil, tap } from "rxjs/operators";
 
-import { Component } from "@angular/core";
+import { FormControl } from "@angular/forms";
+import { Mode } from "../mode-switch/mode";
 import { ToastService } from "../toast.service";
-import { combineLatest } from "rxjs";
-import { map } from "rxjs/operators";
 
 @Component({
   selector: "snuff-header",
@@ -22,19 +24,36 @@ import { map } from "rxjs/operators";
     ])
   ]
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnDestroy {
 
-  public mode$ = combineLatest([
-    this.toastService.isFavouriteOnlyMode$,
-    this.toastService.favourites$
-  ]).pipe(
-    map(([isFavouriteOnlyMode, favourites]) => ({
-      isFavouriteOnlyMode,
-      showButton: (favourites !== undefined) && favourites.length > 0
-    }))
-  );
+  public readonly modeControl = new FormControl(Mode.All);;
+  public readonly destroy$ = new Subject();
 
-  constructor(private readonly toastService: ToastService) { }
+
+  constructor(private readonly toastService: ToastService) {
+    combineLatest([
+      this.toastService.isFavouriteOnlyMode$,
+      this.toastService.favourites$
+    ]).pipe(
+      map(([isFavouriteOnlyMode, favourites]) => ({
+        mode: isFavouriteOnlyMode ? Mode.FavouritesOnly : Mode.All,
+        favouritesAvailable: (favourites !== undefined) && favourites.length > 0
+      })),
+      tap(({ favouritesAvailable }) => favouritesAvailable ? this.modeControl.enable({ emitEvent: false }) : this.modeControl.disable({ emitEvent: false })),
+      tap(({ mode }) => this.modeControl.patchValue(mode, { emitEvent: false })),
+      takeUntil(this.destroy$)
+    ).subscribe();
+
+    this.modeControl.valueChanges.pipe(
+      tap(() => this.toastService.toggleFavouriteOnlyMode()),
+      takeUntil(this.destroy$)
+    ).subscribe()
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   public toggleFavouriteOnlyMode(): void {
     this.toastService.toggleFavouriteOnlyMode();

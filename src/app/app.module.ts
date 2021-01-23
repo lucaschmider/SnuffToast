@@ -12,6 +12,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { ModeSwitchComponent } from './mode-switch/mode-switch.component';
 import { NgModule } from "@angular/core";
+import { ReactiveFormsModule } from "@angular/forms";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { SnuffEffects } from "./store/snuff.effects";
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
@@ -41,6 +42,7 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     EffectsModule.forRoot([SnuffEffects]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
     HttpClientModule,
+    ReactiveFormsModule,
     FeatherModule.pick({ Book, Bookmark, ArrowLeft }),
     MatButtonModule,
     MatIconModule,
