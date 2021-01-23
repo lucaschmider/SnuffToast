@@ -50,4 +50,9 @@
       transform: translateX(-100%) rotate(180deg);
     }
   }
+
+  &.disabled {
+    cursor: default;
+    pointer-events: none;
+  }
 }
