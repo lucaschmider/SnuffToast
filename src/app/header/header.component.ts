@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from "@angular/core";
 import { Subject, combineLatest } from "rxjs";
-import { animate, animation, style, transition, trigger } from "@angular/animations";
+import { animate, style, transition, trigger } from "@angular/animations";
 import { map, takeUntil, tap } from "rxjs/operators";
 
 import { FormControl } from "@angular/forms";

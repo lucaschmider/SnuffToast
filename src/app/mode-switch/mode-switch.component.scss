@@ -7,6 +7,7 @@
 
 .icon {
   transition: 300ms;
+  transition-delay: 300ms;
   stroke: gray;
   &.active {
     stroke: white;
