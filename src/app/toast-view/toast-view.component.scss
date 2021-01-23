@@ -1,7 +1,7 @@
 @use "../../styles.scss";
 
 :host {
-  @include styles.primary-background();
+  background-color: styles.$background-shade;
   width: 70%;
   height: 50%;
   padding: 2rem;
