@@ -42,8 +42,7 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     HttpClientModule,
     ReactiveFormsModule,
     FeatherModule.pick({ Book, Bookmark, ArrowLeft }),
-    HammerModule,
-    ServiceWorkerModule.register("ngsw-worker.js", { enabled: environment.production })
+    HammerModule
   ],
   providers: [],
   bootstrap: [AppComponent]
