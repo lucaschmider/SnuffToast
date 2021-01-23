@@ -8,8 +8,6 @@ import { EffectsModule } from "@ngrx/effects";
 import { FeatherModule } from "angular-feather";
 import { HeaderComponent } from "./header/header.component";
 import { HttpClientModule } from "@angular/common/http";
-import { MatButtonModule } from "@angular/material/button";
-import { MatIconModule } from "@angular/material/icon";
 import { ModeSwitchComponent } from './mode-switch/mode-switch.component';
 import { NgModule } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
@@ -44,8 +42,6 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     HttpClientModule,
     ReactiveFormsModule,
     FeatherModule.pick({ Book, Bookmark, ArrowLeft }),
-    MatButtonModule,
-    MatIconModule,
     HammerModule,
     ServiceWorkerModule.register("ngsw-worker.js", { enabled: environment.production })
   ],
