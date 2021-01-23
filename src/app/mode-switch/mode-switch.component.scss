@@ -48,6 +48,7 @@
     cursor: pointer;
     transition: cubic-bezier(0.5, 0, 0.5, 1) 400ms;
     * {
+      transition: cubic-bezier(0.5, 0, 0.5, 1) 400ms;
       stroke: styles.$accent;
     }
   }
@@ -55,7 +56,11 @@
   &.active {
     .grip {
       margin-left: 100%;
-      transform: translateX(-100%) rotate(180deg);
+      transform: translateX(-100%);
+
+      * {
+        transform: rotate(180deg);
+      }
     }
   }
 
