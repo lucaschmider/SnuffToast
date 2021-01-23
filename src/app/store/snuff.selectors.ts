@@ -19,15 +19,9 @@ export const selectCurrentToasts = createSelector(
     selectFeature,
     selectDisplayedToastCount,
     ({ favourites, favouritesOnly, toasts, index, regularOrder }, displayedToastCount) => {
-        console.log("Change");
-
-        //console.log({ favourites, favouritesOnly, toasts, index, regularOrder, displayedToastCount });
         const targetArray = (favouritesOnly ? favourites : regularOrder);
-        //console.log(`TargetArray: ${JSON.stringify(targetArray)}`);
         const slicedArray = targetArray.slice(index, index + displayedToastCount);
-        //console.log(`SlicedArray: ${JSON.stringify(slicedArray)}`);
         const mappedArray = slicedArray.map(index => toasts[index])
-        //console.log(`MappedArray: ${JSON.stringify(mappedArray)}`);
         return mappedArray;
     }
 );

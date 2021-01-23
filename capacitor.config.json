@@ -1,0 +1,13 @@
+{
+  "appId": "com.lschmider.snufftoast",
+  "appName": "SnuffToast",
+  "bundledWebRuntime": false,
+  "npmClient": "yarn",
+  "webDir": "dist/SnuffToast",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {}
+}

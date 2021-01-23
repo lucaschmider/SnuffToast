@@ -45,7 +45,6 @@ export class AppComponent implements OnDestroy {
 
   private readonly destroy$ = new Subject();
   public readonly displayedToasts$ = this.toastService.currentToasts$.pipe(
-    tap(console.log),
     tap(() => this.firstOffset = { x: 0, y: 0 })
   );
 

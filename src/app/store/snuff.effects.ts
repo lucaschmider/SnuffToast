@@ -1,9 +1,10 @@
 import { Action, Store } from "@ngrx/store";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { catchError, filter, map, switchMap, withLatestFrom } from "rxjs/operators";
+import { catchError, filter, map, switchMap, tap, withLatestFrom } from "rxjs/operators";
 import { dislikeToast, likeToast, loadToasts, loadToastsFailure, loadToastsSuccess, nextIndex, setRandomizeOrder, toastsAvailable, toggleFavouriteMode } from "./snuff.actions";
 import { selectAvailableToastCount, selectIsFavouriteOnlyMode, selectIsInitialized } from "./snuff.selectors";
 
+import { HapticsService } from "../haptics.service";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Toast } from "./toast";
@@ -37,6 +38,7 @@ export class SnuffEffects {
 
     public readonly handleToastConsumption$ = createEffect(() => this.actions$.pipe(
         ofType(likeToast, dislikeToast),
+        tap(() => this.hapticsService.triggerImpact()),
         withLatestFrom(this.store.select(selectIsFavouriteOnlyMode)),
         filter(([{ type }, isFavouriteOnlyMode]) => !isFavouriteOnlyMode || type !== dislikeToast.type),
         map(() => nextIndex())
@@ -45,7 +47,8 @@ export class SnuffEffects {
     constructor(
         private actions$: Actions,
         private httpClient: HttpClient,
-        private store: Store
+        private store: Store,
+        private hapticsService: HapticsService
     ) { }
 
     private static shuffle<T>(input: T[]): T[] {
