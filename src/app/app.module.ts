@@ -1,13 +1,16 @@
 import { ActionReducer, MetaReducer, StoreModule } from "@ngrx/store";
+import { ArrowLeft, Book, Bookmark } from "angular-feather/icons";
 import { BrowserModule, HammerModule } from "@angular/platform-browser";
 
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { EffectsModule } from "@ngrx/effects";
+import { FeatherModule } from "angular-feather";
 import { HeaderComponent } from "./header/header.component";
 import { HttpClientModule } from "@angular/common/http";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
+import { ModeSwitchComponent } from './mode-switch/mode-switch.component';
 import { NgModule } from "@angular/core";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { SnuffEffects } from "./store/snuff.effects";
@@ -28,7 +31,8 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
   declarations: [
     AppComponent,
     ToastViewComponent,
-    HeaderComponent
+    HeaderComponent,
+    ModeSwitchComponent
   ],
   imports: [
     BrowserModule,
@@ -37,6 +41,7 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     EffectsModule.forRoot([SnuffEffects]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
     HttpClientModule,
+    FeatherModule.pick({ Book, Bookmark, ArrowLeft }),
     MatButtonModule,
     MatIconModule,
     HammerModule,

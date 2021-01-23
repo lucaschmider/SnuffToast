@@ -1,0 +1,53 @@
+:host {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  transition: 300ms;
+  stroke: gray;
+  &.active {
+    stroke: white;
+    transform: scale(1.3);
+
+    &.book {
+      stroke: #9b7e46;
+    }
+
+    &.bookmark {
+      stroke: crimson;
+    }
+  }
+}
+.switch {
+  $grip-size: 1.5rem;
+  $width-multiplier: 2.5;
+  margin: 0 0.8rem;
+  padding: 0.3rem;
+  width: $grip-size * $width-multiplier;
+  border-radius: $grip-size;
+  background-color: rgb(194, 194, 194);
+
+  .grip {
+    background-color: white;
+    border-radius: $grip-size / 2;
+    height: $grip-size;
+    width: $grip-size;
+    box-shadow: 0 -5px 5px -3px rgb(0 0 0 / 20%),
+      0 8px 10px 1px rgb(0 0 0 / 14%), 0 3px 14px 2px rgb(0 0 0 / 12%);
+    cursor: pointer;
+    transition: cubic-bezier(0.5, 0, 0.5, 1) 400ms;
+    * {
+      stroke: rgb(194, 194, 194);
+    }
+  }
+
+  &.active {
+    .grip {
+      margin-left: 100%;
+      transform: translateX(-100%) rotate(180deg);
+    }
+  }
+}

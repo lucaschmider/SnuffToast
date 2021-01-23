@@ -1,0 +1,7 @@
+<i-feather name="Book" class="icon book" [ngClass]="{'active': !active}"></i-feather>
+<div class="switch" [ngClass]="{'active': active}" (click)="active = !active">
+    <div class="grip">
+        <i-feather name="arrow-left"></i-feather>
+    </div>
+</div>
+<i-feather name="Bookmark" class="icon bookmark" [ngClass]="{'active': active}"></i-feather>
