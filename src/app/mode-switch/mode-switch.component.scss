@@ -1,14 +1,15 @@
 @use "../../styles.scss";
+
 :host {
-  padding: 1rem;
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: center;
+  padding: 1rem;
 }
 
 .icon {
-  transition: all 300ms 300ms, opacity 400ms;
   stroke: gray;
+  transition: all 300ms 300ms, opacity 400ms;
 
   &.bookmark {
     fill: gray;
@@ -23,32 +24,38 @@
     }
 
     &.bookmark {
-      stroke: crimson;
       fill: crimson;
+      stroke: crimson;
     }
   }
 }
+
 .switch {
   $grip-size: 1.5rem;
   $width-multiplier: 2.5;
+
+  background-color: rgb(194, 194, 194);
+  border-radius: $grip-size;
   margin: 0 0.8rem;
   padding: 0.3rem;
-  width: $grip-size * $width-multiplier;
-  border-radius: $grip-size;
-  background-color: rgb(194, 194, 194);
   transition: opacity 400ms;
+  width: $grip-size * $width-multiplier;
+
   .grip {
     background-color: white;
     border-radius: $grip-size / 2;
-    height: $grip-size;
-    width: $grip-size;
-    box-shadow: 0 -5px 5px -3px rgb(0 0 0 / 20%),
-      0 8px 10px 1px rgb(0 0 0 / 14%), 0 3px 14px 2px rgb(0 0 0 / 12%);
+    box-shadow:
+    0 -5px 5px -3px rgb(0 0 0 / 20%),
+    0 8px 10px 1px rgb(0 0 0 / 14%),
+    0 3px 14px 2px rgb(0 0 0 / 12%);
     cursor: pointer;
+    height: $grip-size;
     transition: all cubic-bezier(0.5, 0, 0.5, 1) 400ms, opacity 400ms;
+    width: $grip-size;
+
     * {
-      transition: cubic-bezier(0.5, 0, 0.5, 1) 400ms;
       stroke: styles.$accent;
+      transition: cubic-bezier(0.5, 0, 0.5, 1) 400ms;
     }
   }
 
@@ -63,8 +70,9 @@
     }
   }
 }
+
 .disabled {
   cursor: default;
-  pointer-events: none;
   opacity: 0.1;
+  pointer-events: none;
 }

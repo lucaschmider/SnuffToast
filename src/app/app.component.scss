@@ -6,11 +6,11 @@
   width: 100%;
 
   #wrapper {
-    flex: 1;
-    display: flex;
     align-items: center;
-    justify-content: center;
+    display: flex;
+    flex: 1;
     flex-direction: column;
+    justify-content: center;
     padding: 1rem;
   }
 
