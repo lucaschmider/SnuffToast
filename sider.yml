@@ -2,9 +2,3 @@ linter:
   eslint:
     config: .eslintrc.json
     ext: ".ts"
-  stylelint:
-    npm_install: true
-    root_dir: "."
-    syntax: scss
-    glob: "**/*.scss"
-    config: ".stylelintrc.json"

@@ -8,15 +8,15 @@
 }
 
 .icon {
-  stroke: gray;
+  stroke: styles.$gray;
   transition: all 300ms 300ms, opacity 400ms;
 
   &.bookmark {
-    fill: gray;
+    fill: styles.$gray;
   }
 
   &.active {
-    stroke: white;
+    stroke: #ffffff;
     transform: scale(1.3);
 
     &.book {
@@ -24,8 +24,8 @@
     }
 
     &.bookmark {
-      fill: crimson;
-      stroke: crimson;
+      fill: styles.$red;
+      stroke: styles.$red;
     }
   }
 }
@@ -44,10 +44,8 @@
   .grip {
     background-color: white;
     border-radius: $grip-size / 2;
-    box-shadow:
-    0 -5px 5px -3px rgb(0 0 0 / 20%),
-    0 8px 10px 1px rgb(0 0 0 / 14%),
-    0 3px 14px 2px rgb(0 0 0 / 12%);
+    box-shadow: 0 -5px 5px -3px rgb(0 0 0 / 20%),
+      0 8px 10px 1px rgb(0 0 0 / 14%), 0 3px 14px 2px rgb(0 0 0 / 12%);
     cursor: pointer;
     height: $grip-size;
     transition: all cubic-bezier(0.5, 0, 0.5, 1) 400ms, opacity 400ms;
