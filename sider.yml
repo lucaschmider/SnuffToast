@@ -1,10 +1,10 @@
-# linter:
-# # https://help.sider.review/getting-started/custom-configuration
+linter:
+  # # https://help.sider.review/getting-started/custom-configuration
 
-#   # https://help.sider.review/tools/javascript/eslint
-eslint:
-  config: .eslintrc.json
-  ext: ".ts"
+  #   # https://help.sider.review/tools/javascript/eslint
+  eslint:
+    config: .eslintrc.json
+    ext: ".ts"
 #   # https://help.sider.review/tools/css/stylelint
 #   stylelint:
 #     npm_install: false
