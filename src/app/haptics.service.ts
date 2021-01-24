@@ -1,28 +1,27 @@
 import {
   Capacitor,
   HapticsImpactStyle,
-  Plugins
-} from '@capacitor/core';
+  Plugins,
+} from "@capacitor/core";
 
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
 const { Haptics } = Plugins;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class HapticsService {
-
   public triggerImpact(): void {
     if (HapticsService.IsAvailable()) {
       Haptics.impact({
-        style: HapticsImpactStyle.Heavy
+        style: HapticsImpactStyle.Heavy,
       });
     }
   }
 
   private static IsAvailable(): boolean {
-    const HapticsIsAvailable = Capacitor.isPluginAvailable('Haptics');
+    const HapticsIsAvailable = Capacitor.isPluginAvailable("Haptics");
     return HapticsIsAvailable;
   }
 }

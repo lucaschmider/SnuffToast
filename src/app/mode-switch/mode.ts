@@ -1,4 +1,4 @@
 export enum Mode {
-    All,
-    FavouritesOnly
+  All,
+  FavouritesOnly,
 }

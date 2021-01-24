@@ -8,10 +8,9 @@ import { EffectsModule } from "@ngrx/effects";
 import { FeatherModule } from "angular-feather";
 import { HeaderComponent } from "./header/header.component";
 import { HttpClientModule } from "@angular/common/http";
-import { ModeSwitchComponent } from './mode-switch/mode-switch.component';
+import { ModeSwitchComponent } from "./mode-switch/mode-switch.component";
 import { NgModule } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
-import { ServiceWorkerModule } from "@angular/service-worker";
 import { SnuffEffects } from "./store/snuff.effects";
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 import { ToastViewComponent } from "./toast-view/toast-view.component";
@@ -20,18 +19,17 @@ import { featureKey } from "./store/constants";
 import { localStorageSync } from "ngrx-store-localstorage";
 import { snuffReducer } from "./store/snuff.reducer";
 
-export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
+export function localStorageSyncReducer(reducer: ActionReducer<unknown>): ActionReducer<unknown> {
   return localStorageSync({ keys: [featureKey], rehydrate: true })(reducer);
 }
-const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
-
+const metaReducers: Array<MetaReducer> = [localStorageSyncReducer];
 
 @NgModule({
   declarations: [
     AppComponent,
     ToastViewComponent,
     HeaderComponent,
-    ModeSwitchComponent
+    ModeSwitchComponent,
   ],
   imports: [
     BrowserModule,
@@ -42,9 +40,9 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     HttpClientModule,
     ReactiveFormsModule,
     FeatherModule.pick({ Book, Bookmark, ArrowLeft }),
-    HammerModule
+    HammerModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

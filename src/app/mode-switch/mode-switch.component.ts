@@ -1,25 +1,28 @@
-import { Component, forwardRef } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Component, forwardRef } from "@angular/core";
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 import { Mode } from "./mode";
 
 @Component({
-  selector: 'snuff-mode-switch',
-  templateUrl: './mode-switch.component.html',
-  styleUrls: ['./mode-switch.component.scss'],
+  selector: "snuff-mode-switch",
+  templateUrl: "./mode-switch.component.html",
+  styleUrls: ["./mode-switch.component.scss"],
   providers: [{
     provide: NG_VALUE_ACCESSOR,
+    // eslint-disable-next-line no-use-before-define
     useExisting: forwardRef(() => ModeSwitchComponent),
-    multi: true
-  }]
+    multi: true,
+  }],
 })
 export class ModeSwitchComponent implements ControlValueAccessor {
-
-
   public mode: Mode = Mode.All;
-  public disabled: boolean = false;
+
+  public disabled = false;
+
   public readonly MODES = Mode;
+
   private onChange: (value: Mode) => void;
+
   private onTouched: () => void;
 
   public toggle(): void {
@@ -28,20 +31,19 @@ export class ModeSwitchComponent implements ControlValueAccessor {
     if (this.onTouched !== undefined) this.onTouched();
   }
 
-  public writeValue(obj: any): void {
+  public writeValue(obj: Mode): void {
     this.mode = obj === Mode.FavouritesOnly ? Mode.FavouritesOnly : Mode.All;
   }
 
-  public registerOnChange(fn: any): void {
+  public registerOnChange(fn: (value: Mode) => void): void {
     this.onChange = fn;
   }
 
-  public registerOnTouched(fn: any): void {
+  public registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 
   public setDisabledState?(isDisabled: boolean): void {
     this.disabled = isDisabled;
   }
-
 }

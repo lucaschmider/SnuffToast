@@ -1,0 +1,4 @@
+linter:
+  eslint:
+    config: .eslintrc.json
+    ext: ".ts"
