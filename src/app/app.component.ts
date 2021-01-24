@@ -1,5 +1,7 @@
 import { Component, OnDestroy } from "@angular/core";
-import { animate, state, style, transition, trigger } from "@angular/animations";
+import {
+  animate, state, style, transition, trigger,
+} from "@angular/animations";
 import { takeUntil, tap } from "rxjs/operators";
 
 import { Subject } from "rxjs";
@@ -13,16 +15,15 @@ export function calculateStyles(index: number, totalCount: number): { "z-index":
   return {
     "z-index": totalCount - index,
     transform: `${scaleClause} ${translateClause}`,
-    filter: `brightness(${(totalCount - index) / totalCount})`
+    filter: `brightness(${(totalCount - index) / totalCount})`,
   };
 }
 
 @Component({
   selector: "snuff-root",
   templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.scss"],
-  animations: [
-    trigger("cardStack", [
+  styleUrls: [ "./app.component.scss" ],
+  animations: [ trigger("cardStack", [
       state("0", style(calculateStyles(0, 5))),
       state("1", style(calculateStyles(1, 5))),
       state("2", style(calculateStyles(2, 5))),
@@ -31,12 +32,11 @@ export function calculateStyles(index: number, totalCount: number): { "z-index":
       state("void", style({ ...calculateStyles(5, 5), opacity: 0 })),
       transition(":leave", [
         style({ opacity: 1 }),
-        animate("500ms linear", style({ opacity: 0, transform: "scale(0.5) translateY(10rem)" }))
+        animate("500ms linear", style({ opacity: 0, transform: "scale(0.5) translateY(10rem)" })),
       ]),
       transition("* <=> *", animate("500ms cubic-bezier(0.68, -0.55, 0.27, 1.55)")),
 
-    ])
-  ]
+    ]), ],
 })
 export class AppComponent implements OnDestroy {
   private firstOffset: {
@@ -45,18 +45,19 @@ export class AppComponent implements OnDestroy {
   } = { x: 0, y: 0 };
 
   private readonly destroy$ = new Subject();
+
   public readonly displayedToasts$ = this.toastService.currentToasts$.pipe(
-    tap(() => this.firstOffset = { x: 0, y: 0 })
+    tap(() => this.firstOffset = { x: 0, y: 0 }),
   );
 
   constructor(
-    private readonly toastService: ToastService
+    private readonly toastService: ToastService,
   ) {
     toastService.initializeData();
 
     this.toastService.isFavouriteOnlyMode$.pipe(
       tap(() => this.firstOffset = { x: 0, y: 0 }),
-      takeUntil(this.destroy$)
+      takeUntil(this.destroy$),
     ).subscribe();
   }
 
@@ -69,7 +70,7 @@ export class AppComponent implements OnDestroy {
     if (index !== 0) return;
 
     return {
-      transform: `translate(${this.firstOffset.x}px, ${this.firstOffset.y}px) rotateZ(${this.firstOffset.x * 120 / (2 * window.innerWidth)}deg)`
+      transform: `translate(${this.firstOffset.x}px, ${this.firstOffset.y}px) rotateZ(${this.firstOffset.x * 120 / (2 * window.innerWidth)}deg)`,
     };
   }
 
@@ -92,5 +93,4 @@ export class AppComponent implements OnDestroy {
       this.toastService.dislike();
     }
   }
-
 }
