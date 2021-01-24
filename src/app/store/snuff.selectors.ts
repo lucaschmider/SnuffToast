@@ -1,8 +1,11 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 
-import { map } from "rxjs/operators";
 import { SnuffState } from "./snuff.state";
 import { featureKey } from "./constants";
+
+export const calculateDisplayedToastCount = ({
+  targetCardCount, favourites, toasts, favouritesOnly,
+}: SnuffState): number => Math.min(targetCardCount, (favouritesOnly ? favourites : toasts).length);
 
 export const selectFeature = createFeatureSelector<SnuffState>(featureKey);
 export const selectToastCount = createSelector(
@@ -40,7 +43,7 @@ export const selectFavourites = createSelector(
 
 export const selectIsInitialized = createSelector(
   selectFeature,
-  (state) => state.toasts !== undefined && state.toasts.length > 0,
+  (state) => !!state.toasts?.length,
 );
 
 export const selectAvailableToastCount = createSelector(
@@ -50,7 +53,3 @@ export const selectAvailableToastCount = createSelector(
     totalCount: state.toasts.length,
   }),
 );
-
-export const calculateDisplayedToastCount = ({
-  targetCardCount, favourites, toasts, favouritesOnly,
-}: SnuffState): number => Math.min(targetCardCount, (favouritesOnly ? favourites : toasts).length);

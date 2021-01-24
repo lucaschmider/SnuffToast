@@ -1,53 +1,31 @@
 import { Component, OnDestroy } from "@angular/core";
-import {
-  animate, state, style, transition, trigger,
-} from "@angular/animations";
+import { Origin, Point } from "./point";
 import { takeUntil, tap } from "rxjs/operators";
 
+import { HammerPanEventData } from "./HammerPanEventData";
 import { Subject } from "rxjs";
 import { ToastService } from "./toast.service";
+import { cardStack } from "./card-stack";
 
-export function calculateStyles(index: number, totalCount: number): { "z-index": number, "transform"?: string, "filter"?: string } {
-  if (index === 0) return { "z-index": totalCount - index };
-  const scaleClause = `scale(${(10 - index) / 10})`;
-  const translateClause = `translateY(${-index * 3}rem)`;
-
-  return {
-    "z-index": totalCount - index,
-    transform: `${scaleClause} ${translateClause}`,
-    filter: `brightness(${(totalCount - index) / totalCount})`,
-  };
-}
+export const firstCardIndex = 0;
+export const scaleRatio = 10;
+export const yOffsetPerLevel = 3;
+const safeSpaceRatio = 0.3;
+const cardCount = 5;
 
 @Component({
   selector: "snuff-root",
   templateUrl: "./app.component.html",
-  styleUrls: [ "./app.component.scss" ],
-  animations: [ trigger("cardStack", [
-      state("0", style(calculateStyles(0, 5))),
-      state("1", style(calculateStyles(1, 5))),
-      state("2", style(calculateStyles(2, 5))),
-      state("3", style(calculateStyles(3, 5))),
-      state("4", style(calculateStyles(4, 5))),
-      state("void", style({ ...calculateStyles(5, 5), opacity: 0 })),
-      transition(":leave", [
-        style({ opacity: 1 }),
-        animate("500ms linear", style({ opacity: 0, transform: "scale(0.5) translateY(10rem)" })),
-      ]),
-      transition("* <=> *", animate("500ms cubic-bezier(0.68, -0.55, 0.27, 1.55)")),
-
-    ]), ],
+  styleUrls: ["./app.component.scss"],
+  animations: [cardStack(cardCount)],
 })
 export class AppComponent implements OnDestroy {
-  private firstOffset: {
-    x: number,
-    y: number
-  } = { x: 0, y: 0 };
+  private firstOffset: Point = Origin;
 
   private readonly destroy$ = new Subject();
 
   public readonly displayedToasts$ = this.toastService.currentToasts$.pipe(
-    tap(() => this.firstOffset = { x: 0, y: 0 }),
+    tap(() => this.firstOffset = Origin),
   );
 
   constructor(
@@ -67,27 +45,32 @@ export class AppComponent implements OnDestroy {
   }
 
   public getStyles(index: number): { transform: string } {
-    if (index !== 0) return;
+    if (index !== firstCardIndex) return;
 
+    const maximumCardRotation = 120;
+    const sideCount = 2;
     return {
-      transform: `translate(${this.firstOffset.x}px, ${this.firstOffset.y}px) rotateZ(${this.firstOffset.x * 120 / (2 * window.innerWidth)}deg)`,
+      transform: `translate(${this.firstOffset.x}px, ${this.firstOffset.y}px)`
+        + `rotateZ(${this.firstOffset.x * maximumCardRotation / (sideCount * window.innerWidth)}deg)`,
     };
   }
 
-  public onPan(index: number, { deltaX, deltaY }: any): void {
-    if (index !== 0) return;
+  public onPan(index: number, { deltaX, deltaY }: HammerPanEventData): void {
+    if (index !== firstCardIndex) return;
     this.firstOffset = { x: deltaX, y: deltaY };
   }
 
-  public onPanEnd(index: number, event: any): void {
-    if (index !== 0 || event?.deltaX === undefined) return;
+  public onPanEnd(index: number, event?: HammerPanEventData): void {
+    if (index !== firstCardIndex || event?.deltaX === undefined) return;
 
-    if (Math.abs(event.deltaX) < 0.3 * window.innerWidth) {
-      this.firstOffset = { x: 0, y: 0 };
+
+    if (Math.abs(event.deltaX) < safeSpaceRatio * window.innerWidth) {
+      this.firstOffset = Origin;
       return;
     }
 
-    if (event.deltaX < 0) {
+    const directionDefiningThresholdX = 0;
+    if (event.deltaX < directionDefiningThresholdX) {
       this.toastService.like();
     } else {
       this.toastService.dislike();

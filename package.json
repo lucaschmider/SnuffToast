@@ -38,6 +38,7 @@
     "@angular/cli": "~10.0.1",
     "@angular/compiler-cli": "~10.0.2",
     "@capacitor/cli": "latest",
+    "@types/hammerjs": "^2.0.36",
     "@types/node": "^12.11.1",
     "@typescript-eslint/eslint-plugin": "^4.4.1",
     "@typescript-eslint/parser": "^4.14.0",

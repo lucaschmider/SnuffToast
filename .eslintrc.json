@@ -21,7 +21,6 @@
     "init-declarations": "warn",
     "no-use-before-define": "error",
     "array-bracket-newline": ["error", { "minItems": 2 }],
-    "array-bracket-spacing": ["warn", "always"],
     "array-element-newline": ["warn", { "minItems": 2 }],
     "comma-spacing": "warn",
     "max-len": ["warn", { "code": 140 }],

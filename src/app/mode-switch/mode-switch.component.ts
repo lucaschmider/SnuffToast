@@ -6,12 +6,13 @@ import { Mode } from "./mode";
 @Component({
   selector: "snuff-mode-switch",
   templateUrl: "./mode-switch.component.html",
-  styleUrls: [ "./mode-switch.component.scss" ],
-  providers: [ {
+  styleUrls: ["./mode-switch.component.scss"],
+  providers: [{
     provide: NG_VALUE_ACCESSOR,
+    // eslint-disable-next-line no-use-before-define
     useExisting: forwardRef(() => ModeSwitchComponent),
     multi: true,
-  } ],
+  }],
 })
 export class ModeSwitchComponent implements ControlValueAccessor {
   public mode: Mode = Mode.All;
@@ -30,15 +31,15 @@ export class ModeSwitchComponent implements ControlValueAccessor {
     if (this.onTouched !== undefined) this.onTouched();
   }
 
-  public writeValue(obj: any): void {
+  public writeValue(obj: Mode): void {
     this.mode = obj === Mode.FavouritesOnly ? Mode.FavouritesOnly : Mode.All;
   }
 
-  public registerOnChange(fn: any): void {
+  public registerOnChange(fn: (value: Mode) => void): void {
     this.onChange = fn;
   }
 
-  public registerOnTouched(fn: any): void {
+  public registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 

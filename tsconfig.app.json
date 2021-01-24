@@ -7,9 +7,10 @@
   },
   "files": [
     "src/main.ts",
-    "src/polyfills.ts"
+    "src/polyfills.ts",
+    "./src/app/calculateStyles.ts",
+    "./src/app/HammerPanEventData.ts",
+    "./src/app/store/shuffle.ts"
   ],
-  "include": [
-    "src/**/*.d.ts"
-  ]
+  "include": ["src/**/*.d.ts"]
 }

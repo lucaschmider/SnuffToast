@@ -1,10 +1,25 @@
 import { createReducer, on } from "@ngrx/store";
 import {
-  dislikeToast, likeToast, loadToastsSuccess, nextIndex, setRandomizeOrder, toggleFavouriteMode,
+  dislikeToast,
+  likeToast,
+  loadToastsSuccess,
+  nextIndex,
+  setRandomizeOrder,
+  toggleFavouriteMode,
 } from "./snuff.actions";
 
 import { SnuffState } from "./snuff.state";
-import { calculateDisplayedToastCount } from "./snuff.selectors";
+
+const zeroBasedOffset = 1;
+const startIndex = 0;
+const indexDelta = 1;
+const minimumRequiredFavourites = 1;
+
+export const isIndexResetNeeded =
+  ({ favouritesOnly, favourites, regularOrder, index }: SnuffState): boolean => {
+    const maximumIndex = (favouritesOnly ? favourites : regularOrder).length - zeroBasedOffset;
+    return index < maximumIndex;
+  };
 
 export const initialState: SnuffState = {
   toasts: [],
@@ -18,21 +33,24 @@ export const initialState: SnuffState = {
 export const snuffReducer = createReducer(
   initialState,
   on(loadToastsSuccess, (state, { toasts }) => ({ ...state, toasts })),
-  on(nextIndex, (state) => ({ ...state, index: state.index < (calculateAvailableToastsInCurrentMode(state) - 1) ? state.index + 1 : 0 })),
+  on(nextIndex, (state) => ({
+    ...state,
+    index: isIndexResetNeeded(state) ? state.index + indexDelta : startIndex
+  })),
   on(likeToast, (state) => ({
     ...state,
     favourites: state.favouritesOnly ? state.favourites : [
-...state.favourites,
-state.regularOrder[state.index]
-],
+      ...state.favourites,
+      state.regularOrder[state.index]
+    ],
   })),
   on(dislikeToast, (state) => ({
     ...state,
-    favouritesOnly: state.favouritesOnly && state.favourites.length > 1,
+    favouritesOnly: state.favouritesOnly && state.favourites.length > minimumRequiredFavourites,
     favourites: state.favouritesOnly ? state.favourites.filter((_, index) => state.index !== index) : state.favourites,
   })),
   on(toggleFavouriteMode, (state) => ({ ...state, favouritesOnly: !state.favouritesOnly, index: 0 })),
-  on(setRandomizeOrder, (state, { favouritesOrder, generalOrder }) => ({ ...state, favourites: favouritesOrder, regularOrder: generalOrder })),
+  on(setRandomizeOrder,
+    (state, { favouritesOrder, generalOrder }) =>
+      ({ ...state, favourites: favouritesOrder, regularOrder: generalOrder })),
 );
-
-export const calculateAvailableToastsInCurrentMode = ({ favouritesOnly, favourites, regularOrder }: SnuffState) => (favouritesOnly ? favourites : regularOrder).length;

@@ -13,7 +13,7 @@ export const loadToastsSuccess = createAction(
 
 export const loadToastsFailure = createAction(
   "[Snuff] load toasts failure",
-  props<{ error: any }>(),
+  props<{ error: unknown }>(),
 );
 
 export const setRandomizeOrder = createAction(
