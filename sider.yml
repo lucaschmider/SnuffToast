@@ -4,6 +4,7 @@ linter:
     ext: ".ts"
   stylelint:
     npm_install: true
+    root_dir: "src"
     syntax: scss
     glob: "**/*.scss"
     config: ".stylelintrc.json"
