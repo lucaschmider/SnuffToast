@@ -3,7 +3,7 @@ linter:
     config: .eslintrc.json
     ext: ".ts"
   stylelint:
-    npm_install: false
+    npm_install: true
     syntax: scss
     glob: "**/*.scss"
     config: ".stylelintrc.json"
