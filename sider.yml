@@ -6,3 +6,4 @@ linter:
     npm_install: false
     syntax: scss
     glob: "**/*.{scss}"
+    config: ".stylelintrc.json"
