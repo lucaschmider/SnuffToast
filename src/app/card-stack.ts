@@ -6,10 +6,12 @@ import {
     transition,
     trigger
 } from "@angular/animations";
-import { firstCardIndex, scaleRatio, yOffsetPerLevel } from "./app.component";
+
+export const firstCardIndex = 0;
+export const scaleRatio = 10;
+export const yOffsetPerLevel = 3;
 
 export function calculateStyles(index: number, totalCount: number): { "z-index": number; "transform"?: string; "filter"?: string; } {
-
     if (index === firstCardIndex)
         return { "z-index": totalCount - index };
     const scaleClause = `scale(${(scaleRatio - index) / scaleRatio})`;

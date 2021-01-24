@@ -1,15 +1,12 @@
 import { Component, OnDestroy } from "@angular/core";
 import { Origin, Point } from "./point";
+import { cardStack, firstCardIndex } from "./card-stack";
 import { takeUntil, tap } from "rxjs/operators";
 
 import { HammerPanEventData } from "./HammerPanEventData";
 import { Subject } from "rxjs";
 import { ToastService } from "./toast.service";
-import { cardStack } from "./card-stack";
 
-export const firstCardIndex = 0;
-export const scaleRatio = 10;
-export const yOffsetPerLevel = 3;
 const safeSpaceRatio = 0.3;
 const cardCount = 5;
 
