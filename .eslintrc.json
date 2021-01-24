@@ -19,7 +19,6 @@
     "dot-notation": "warn",
     "no-magic-numbers": "error",
     "init-declarations": "warn",
-    "no-undefined": "warn",
     "no-use-before-define": "error",
     "array-bracket-newline": ["error", { "minItems": 2 }],
     "array-bracket-spacing": ["warn", "always"],
