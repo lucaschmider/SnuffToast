@@ -1,5 +1,4 @@
 import {
-    AnimationTriggerMetadata,
     animate,
     state,
     style,
@@ -10,6 +9,7 @@ import {
 export const firstCardIndex = 0;
 export const scaleRatio = 10;
 export const yOffsetPerLevel = 3;
+export const cardCount = 5;
 
 export function calculateStyles(index: number, totalCount: number): { "z-index": number; "transform"?: string; "filter"?: string; } {
     if (index === firstCardIndex)
@@ -24,15 +24,18 @@ export function calculateStyles(index: number, totalCount: number): { "z-index":
     };
 }
 
-export function cardStack(cardCount: number): AnimationTriggerMetadata {
-    const states = Array(cardCount).map((_, index) => state(`${index}`, style(calculateStyles(index, cardCount))));
-    return trigger("cardStack", [
-        ...states,
-        state("void", style({ ...calculateStyles(cardCount, cardCount), opacity: 0 })),
-        transition(":leave", [
-            style({ opacity: 1 }),
-            animate("500ms linear", style({ opacity: 0, transform: "scale(0.5) translateY(10rem)" })),
-        ]),
-        transition("* <=> *", animate("500ms cubic-bezier(0.68, -0.55, 0.27, 1.55)"))
-    ]);
-}
+// eslint-disable no-magic-numbers
+export const cardStack = trigger("cardStack", [
+    state("0", style(calculateStyles(0, cardCount))),
+    state("1", style(calculateStyles(1, cardCount))),
+    state("2", style(calculateStyles(2, cardCount))),
+    state("3", style(calculateStyles(3, cardCount))),
+    state("4", style(calculateStyles(4, cardCount))),
+    state("void", style({ ...calculateStyles(5, 5), opacity: 0 })),
+    transition(":leave", [
+        style({ opacity: 1 }),
+        animate("500ms linear", style({ opacity: 0, transform: "scale(0.5) translateY(10rem)" })),
+    ]),
+    transition("* <=> *", animate("500ms cubic-bezier(0.68, -0.55, 0.27, 1.55)"))
+]);
+// eslint-enable no-magic-numbers

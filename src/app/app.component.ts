@@ -8,13 +8,12 @@ import { Subject } from "rxjs";
 import { ToastService } from "./toast.service";
 
 const safeSpaceRatio = 0.3;
-const cardCount = 5;
 
 @Component({
   selector: "snuff-root",
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
-  animations: [cardStack(cardCount)],
+  animations: [cardStack],
 })
 export class AppComponent implements OnDestroy {
   private firstOffset: Point = Origin;
