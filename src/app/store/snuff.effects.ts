@@ -26,16 +26,17 @@ import { Injectable } from "@angular/core";
 import { Toast } from "./toast";
 import { of } from "rxjs";
 import { shuffle } from "./array-shuffle";
+import { toasts } from "./toasts";
 
 @Injectable()
 export class SnuffEffects {
   public loadToasts$ = createEffect(() => this.actions$.pipe(
     ofType(loadToasts),
     withLatestFrom(this.store.select(selectIsInitialized)),
-    switchMap(([
+    map(([
       ,
       isInitialized
-    ]) => (isInitialized ? of(true) : this.httpClient.get<Toast[]>("/assets/toasts.json"))),
+    ]) => (isInitialized ? true : toasts)),
     switchMap((result) => {
       const actionsToDispatch = typeof (result) === "boolean" ? [] : [loadToastsSuccess({ toasts: result })] as Action[];
       actionsToDispatch.push(toastsAvailable());
@@ -71,7 +72,6 @@ export class SnuffEffects {
 
   constructor(
     private actions$: Actions,
-    private httpClient: HttpClient,
     private store: Store,
     private hapticsService: HapticsService,
   ) { }

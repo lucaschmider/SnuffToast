@@ -37,7 +37,6 @@ const metaReducers: Array<MetaReducer> = [localStorageSyncReducer];
     StoreModule.forRoot({ [featureKey]: snuffReducer }, { metaReducers }),
     EffectsModule.forRoot([SnuffEffects]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
-    HttpClientModule,
     ReactiveFormsModule,
     FeatherModule.pick({ Book, Bookmark, ArrowLeft }),
     HammerModule,

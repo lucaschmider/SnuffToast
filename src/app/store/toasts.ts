@@ -1,4 +1,5 @@
-[
+/* eslint-disable max-len */
+export const toasts = [
     {
         "title": "vier Jahreszeiten",
         "text": "Im Winter ist es halt schon so gehalten<br />das durch die Kälte die Haut wird gespalten.<br />Im Frühling aber wieder mehr Wärme man verspührt<br />und von alleine die Libido glüht.<br />Der Sommer hat es ganz Dick<br />sind die Miniröcke ganz schick.<br />Ja der Herbst ist doch die beste Zeit<br />die geschwängerte doch zur Hochtzeit schreit.<br />Also liebe Schnupfgemeinschaft sei hier kurz gesagt, <br />vögeln nicht schnupfen, gibt eine Vaterschafts Klag!"
@@ -6519,4 +6520,4 @@
         "title": "Rezept",
         "text": "Jetz lueg emal das Truckli aa!<br />Das Truckli hed än Teckel draa.<br />Jetzt nimmsch de Teckel und denn füllsch,<br />im Gägäsatz zu deet wo't trüllsch,<br />en Schoche Schnupftabak det druuf<br />und biigsch das Alls uf d'Härzhand uuf,<br />teilsch's dur zwöi und denn hesch doch<br />en Bärg für jedes Nasäloch.<br />Jetzt hebsch's i d'Metti, säisch en Schpruch,<br />hebsch's a d'Nasä, schmäcksch dä Gruch,<br />ziilsch chlii guet und ziesch denn dra,<br />denn sött's dr wider besser gaa."
     }
-]
+];
