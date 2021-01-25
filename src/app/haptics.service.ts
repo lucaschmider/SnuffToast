@@ -5,6 +5,7 @@ import {
 } from "@capacitor/core";
 
 import { Injectable } from "@angular/core";
+import { environment } from "src/environments/environment";
 
 const { Haptics } = Plugins;
 
@@ -13,6 +14,8 @@ const { Haptics } = Plugins;
 })
 export class HapticsService {
   public triggerImpact(): void {
+    if (environment.disableHaptics) return;
+    
     if (HapticsService.IsAvailable()) {
       Haptics.impact({
         style: HapticsImpactStyle.Heavy,
