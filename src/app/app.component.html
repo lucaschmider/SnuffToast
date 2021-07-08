@@ -1,6 +1,6 @@
 <snuff-header id="header"></snuff-header>
 <div id="wrapper" *ngIf="displayedToasts$ | async as currentToasts">
     <snuff-toast-view *ngFor="let toast of currentToasts; let i = index" [toast]="toast" [@cardStack]="i"
-        [ngStyle]="getStyles(i)" (pan)="onPan(i, $event)" (panend)="onPanEnd(onPanEnd(i, $event))">
+        [ngStyle]="getStyles(i)" (pan)="onPan(i, $event)" (panend)="onPanEnd(i, $event)">
     </snuff-toast-view>
 </div>

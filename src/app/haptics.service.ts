@@ -4,7 +4,8 @@ import { Injectable } from "@angular/core";
   providedIn: "root",
 })
 export class HapticsService {
-  public triggerImpact(): void {
+  public triggerImpact(): void { 
+    throw new Error("Not implemented");
   }
 
   private static IsAvailable(): boolean {

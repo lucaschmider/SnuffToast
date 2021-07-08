@@ -3,7 +3,7 @@ import { Origin, Point } from "./point";
 import { cardStack, firstCardIndex } from "./card-stack";
 import { takeUntil, tap } from "rxjs/operators";
 
-import { HammerPanEventData } from "./HammerPanEventData";
+import { HammerPanEnd, HammerPanEventData } from "./HammerPanEventData";
 import { Subject } from "rxjs";
 import { ToastService } from "./toast.service";
 
@@ -41,7 +41,7 @@ export class AppComponent implements OnDestroy {
   }
 
   public getStyles(index: number): { transform: string } {
-    if (index !== firstCardIndex) return;
+    if (index !== firstCardIndex) return { transform: "" };
 
     const maximumCardRotation = 120;
     const sideCount = 2;
@@ -51,22 +51,27 @@ export class AppComponent implements OnDestroy {
     };
   }
 
-  public onPan(index: number, { deltaX, deltaY }: HammerPanEventData): void {
-    if (index !== firstCardIndex) return;
+  public onPan(index: number, event: Event): void {
+    if (index !== firstCardIndex || event.type !== HammerPanEnd) return;
+    const { deltaX, deltaY } = event as HammerPanEventData;
     this.firstOffset = { x: deltaX, y: deltaY };
   }
 
-  public onPanEnd(index: number, event?: HammerPanEventData): void {
-    if (index !== firstCardIndex || event?.deltaX === undefined) return;
+  public onPanEnd(index: number, event: Event): void {
+    if (index !== firstCardIndex || event.type !== HammerPanEnd) return;
+    
+    const { deltaX } = event as HammerPanEventData;
+
+    if (index !== firstCardIndex || deltaX === undefined) return;
 
 
-    if (Math.abs(event.deltaX) < safeSpaceRatio * window.innerWidth) {
+    if (Math.abs(deltaX) < safeSpaceRatio * window.innerWidth) {
       this.firstOffset = Origin;
       return;
     }
 
     const directionDefiningThresholdX = 0;
-    if (event.deltaX < directionDefiningThresholdX) {
+    if (deltaX < directionDefiningThresholdX) {
       this.toastService.like();
     } else {
       this.toastService.dislike();
