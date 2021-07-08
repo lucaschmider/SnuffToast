@@ -6,7 +6,6 @@ import { takeUntil, tap } from "rxjs/operators";
 import { HammerPanEventData } from "./HammerPanEventData";
 import { Subject } from "rxjs";
 import { ToastService } from "./toast.service";
-import { Plugins } from '@capacitor/core';
 
 const safeSpaceRatio = 0.3;
 
