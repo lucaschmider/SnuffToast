@@ -1,14 +1,14 @@
 import { Injectable } from "@angular/core";
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
 
 @Injectable({
   providedIn: "root",
 })
 export class HapticsService {
-  public triggerImpact(): void { 
-    throw new Error("Not implemented");
-  }
 
-  private static IsAvailable(): boolean {
-    return false;
+  public triggerImpact(): Promise<void> {
+    return Haptics.impact({
+      style: ImpactStyle.Heavy
+    });
   }
 }

@@ -3,7 +3,7 @@ import { Origin, Point } from "./point";
 import { cardStack, firstCardIndex } from "./card-stack";
 import { takeUntil, tap } from "rxjs/operators";
 
-import { HammerPanEnd, HammerPanEventData } from "./HammerPanEventData";
+import { HammerPan, HammerPanEnd, HammerPanEventData } from "./HammerPanEventData";
 import { Subject } from "rxjs";
 import { ToastService } from "./toast.service";
 
@@ -25,7 +25,7 @@ export class AppComponent implements OnDestroy {
   );
 
   constructor(
-    private readonly toastService: ToastService,
+    private readonly toastService: ToastService
   ) {
     toastService.initializeData();
 
@@ -52,19 +52,16 @@ export class AppComponent implements OnDestroy {
   }
 
   public onPan(index: number, event: Event): void {
-    if (index !== firstCardIndex || event.type !== HammerPanEnd) return;
+    if (index !== firstCardIndex || event.type !== HammerPan) return;
+
     const { deltaX, deltaY } = event as HammerPanEventData;
     this.firstOffset = { x: deltaX, y: deltaY };
   }
 
   public onPanEnd(index: number, event: Event): void {
     if (index !== firstCardIndex || event.type !== HammerPanEnd) return;
-    
+
     const { deltaX } = event as HammerPanEventData;
-
-    if (index !== firstCardIndex || deltaX === undefined) return;
-
-
     if (Math.abs(deltaX) < safeSpaceRatio * window.innerWidth) {
       this.firstOffset = Origin;
       return;
