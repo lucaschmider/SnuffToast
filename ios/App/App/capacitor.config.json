@@ -1,0 +1,6 @@
+{
+	"appId": "ninja.schmider.snufftoast",
+	"appName": "SnuffToast",
+	"webDir": "dist/SnuffToast",
+	"bundledWebRuntime": false
+}
