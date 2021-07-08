@@ -3,10 +3,9 @@ import { Origin, Point } from "./point";
 import { cardStack, firstCardIndex } from "./card-stack";
 import { takeUntil, tap } from "rxjs/operators";
 
-import { HammerPanEventData } from "./HammerPanEventData";
+import { HammerPan, HammerPanEnd, HammerPanEventData } from "./HammerPanEventData";
 import { Subject } from "rxjs";
 import { ToastService } from "./toast.service";
-import { Plugins } from '@capacitor/core';
 
 const safeSpaceRatio = 0.3;
 
@@ -26,7 +25,7 @@ export class AppComponent implements OnDestroy {
   );
 
   constructor(
-    private readonly toastService: ToastService,
+    private readonly toastService: ToastService
   ) {
     toastService.initializeData();
 
@@ -42,7 +41,7 @@ export class AppComponent implements OnDestroy {
   }
 
   public getStyles(index: number): { transform: string } {
-    if (index !== firstCardIndex) return;
+    if (index !== firstCardIndex) return { transform: "" };
 
     const maximumCardRotation = 120;
     const sideCount = 2;
@@ -52,22 +51,24 @@ export class AppComponent implements OnDestroy {
     };
   }
 
-  public onPan(index: number, { deltaX, deltaY }: HammerPanEventData): void {
-    if (index !== firstCardIndex) return;
+  public onPan(index: number, event: Event): void {
+    if (index !== firstCardIndex || event.type !== HammerPan) return;
+
+    const { deltaX, deltaY } = event as HammerPanEventData;
     this.firstOffset = { x: deltaX, y: deltaY };
   }
 
-  public onPanEnd(index: number, event?: HammerPanEventData): void {
-    if (index !== firstCardIndex || event?.deltaX === undefined) return;
+  public onPanEnd(index: number, event: Event): void {
+    if (index !== firstCardIndex || event.type !== HammerPanEnd) return;
 
-
-    if (Math.abs(event.deltaX) < safeSpaceRatio * window.innerWidth) {
+    const { deltaX } = event as HammerPanEventData;
+    if (Math.abs(deltaX) < safeSpaceRatio * window.innerWidth) {
       this.firstOffset = Origin;
       return;
     }
 
     const directionDefiningThresholdX = 0;
-    if (event.deltaX < directionDefiningThresholdX) {
+    if (deltaX < directionDefiningThresholdX) {
       this.toastService.like();
     } else {
       this.toastService.dislike();
