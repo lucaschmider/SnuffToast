@@ -18,15 +18,16 @@
     "no-alert": "error",
     "dot-notation": "warn",
     "no-magic-numbers": "error",
-    "init-declarations": "warn",
+    "init-declarations": "error",
     "no-use-before-define": "error",
-    "array-bracket-newline": ["error", { "minItems": 2 }],
+    "array-bracket-newline": ["warn", { "minItems": 2 }],
     "array-element-newline": ["warn", { "minItems": 2 }],
     "comma-spacing": "warn",
     "max-len": ["warn", { "code": 140 }],
     "quotes": ["warn", "double", { "avoidEscape": true }],
     "semi": "warn",
     "arrow-parens": ["warn", "always"],
-    "arrow-spacing": "warn"
+    "arrow-spacing": "warn",
+    "space-in-parens": "warn"
   }
 }
