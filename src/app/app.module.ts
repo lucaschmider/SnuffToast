@@ -18,6 +18,8 @@ import { environment } from "../environments/environment";
 import { featureKey } from "./store/constants";
 import { localStorageSync } from "ngrx-store-localstorage";
 import { snuffReducer } from "./store/snuff.reducer";
+import { AngularFireModule } from "@angular/fire";
+import { AngularFirestoreModule } from "@angular/fire/firestore";
 
 export function localStorageSyncReducer(reducer: ActionReducer<unknown>): ActionReducer<unknown> {
   return localStorageSync({ keys: [featureKey], rehydrate: true })(reducer);
@@ -34,6 +36,8 @@ const metaReducers: Array<MetaReducer> = [localStorageSyncReducer];
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
     StoreModule.forRoot({ [featureKey]: snuffReducer }, { metaReducers }),
     EffectsModule.forRoot([SnuffEffects]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
