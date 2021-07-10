@@ -1,5 +1,4 @@
 import { createAction, props } from "@ngrx/store";
-
 import { Toast } from "./toast";
 
 export const loadToasts = createAction(
@@ -21,8 +20,9 @@ export const setRandomizeOrder = createAction(
   props<{ generalOrder: number[], favouritesOrder: number[] }>(),
 );
 
-export const nextIndex = createAction(
-  "[Snuff] next index",
+export const addToStack = createAction(
+  "[Snuff] add to stack",
+  props<{ toastsToAdd: string[] }>()
 );
 
 export const likeToast = createAction(
@@ -40,3 +40,4 @@ export const toggleFavouriteMode = createAction(
 export const toastsAvailable = createAction(
   "[Snuff] toasts available",
 );
+export const applicationReady = createAction("[Snuff] Application ready");

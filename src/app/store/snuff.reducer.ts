@@ -1,56 +1,70 @@
+import { createEntityAdapter } from "@ngrx/entity";
 import { createReducer, on } from "@ngrx/store";
+import { firstArrayIndex, removeFirstElement } from "./array-helpers";
 import {
+  addToStack,
   dislikeToast,
   likeToast,
   loadToastsSuccess,
-  nextIndex,
-  setRandomizeOrder,
   toggleFavouriteMode,
 } from "./snuff.actions";
 
 import { SnuffState } from "./snuff.state";
+import { Toast } from "./toast";
 
-const zeroBasedOffset = 1;
-const startIndex = 0;
-const indexDelta = 1;
-const minimumRequiredFavourites = 1;
+const entityAdapter = createEntityAdapter<Toast>({
+  selectId: ({ toastId }) => toastId
+});
 
-export const isIndexResetNeeded =
-  ({ favouritesOnly, favourites, regularOrder, index }: SnuffState): boolean => {
-    const maximumIndex = (favouritesOnly ? favourites : regularOrder).length - zeroBasedOffset;
-    return index < maximumIndex;
-  };
-
-export const initialState: SnuffState = {
-  toasts: [],
+export const initialState: SnuffState = entityAdapter.getInitialState({
   favourites: [],
   favouritesOnly: false,
-  index: 0,
-  regularOrder: [],
   targetCardCount: 5,
-};
+  displayedToastIds: []
+});
 
 export const snuffReducer = createReducer(
   initialState,
-  on(loadToastsSuccess, (state, { toasts }) => ({ ...state, toasts })),
-  on(nextIndex, (state) => ({
+  on(loadToastsSuccess, (state, { toasts }) => entityAdapter.addMany(toasts, state)),
+  on(toggleFavouriteMode, (state) => ({
     ...state,
-    index: isIndexResetNeeded(state) ? state.index + indexDelta : startIndex
+    favouritesOnly: !state.favouritesOnly,
+    displayedToastIds: []
   })),
-  on(likeToast, (state) => ({
+  on(likeToast, (state) => {
+    const currentToast = state.displayedToastIds[firstArrayIndex];
+    const isAlreadyFavourite = state.favourites.includes(currentToast);
+
+    return {
+      ...state,
+      lastRemovedCardId: currentToast,
+      displayedToastIds: removeFirstElement(state.displayedToastIds),
+      favourites: isAlreadyFavourite
+        ? state.favourites
+        : [
+          ...state.favourites,
+          currentToast
+        ]
+    };
+  }),
+  on(dislikeToast, (state) => {
+    const currentToast = state.displayedToastIds[firstArrayIndex];
+    const isAlreadyFavourite = state.favourites.includes(currentToast);
+
+    return {
+      ...state,
+      lastRemovedCardId: currentToast,
+      displayedToastIds: removeFirstElement(state.displayedToastIds),
+      favourites: isAlreadyFavourite
+        ? state.favourites.filter((toastId) => toastId !== currentToast)
+        : state.favourites
+    };
+  }),
+  on(addToStack, (state, { toastsToAdd }) => ({
     ...state,
-    favourites: state.favouritesOnly ? state.favourites : [
-      ...state.favourites,
-      state.regularOrder[state.index]
-    ],
-  })),
-  on(dislikeToast, (state) => ({
-    ...state,
-    favouritesOnly: state.favouritesOnly && state.favourites.length > minimumRequiredFavourites,
-    favourites: state.favouritesOnly ? state.favourites.filter((_, index) => state.index !== index) : state.favourites,
-  })),
-  on(toggleFavouriteMode, (state) => ({ ...state, favouritesOnly: !state.favouritesOnly, index: 0 })),
-  on(setRandomizeOrder,
-    (state, { favouritesOrder, generalOrder }) =>
-      ({ ...state, favourites: favouritesOrder, regularOrder: generalOrder })),
+    displayedToastIds: [
+      ...state.displayedToastIds,
+      ...toastsToAdd
+    ]
+  }))
 );

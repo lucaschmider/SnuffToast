@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from "@angular/core";
 import { Origin, Point } from "./point";
 import { cardStack, firstCardIndex } from "./card-stack";
-import { takeUntil, tap } from "rxjs/operators";
+import { tap } from "rxjs/operators";
 
 import { HammerPan, HammerPanEnd, HammerPanEventData } from "./HammerPanEventData";
 import { Subject } from "rxjs";
@@ -19,20 +19,14 @@ export class AppComponent implements OnDestroy {
   private firstOffset: Point = Origin;
 
   private readonly destroy$ = new Subject();
-
-  public readonly displayedToasts$ = this.toastService.currentToasts$.pipe(
-    tap(() => this.firstOffset = Origin),
+  public readonly viewObj$ = this.toastService.viewObj$.pipe(
+    tap(() => this.firstOffset = Origin)
   );
 
   constructor(
     private readonly toastService: ToastService
   ) {
     toastService.initializeData();
-
-    this.toastService.isFavouriteOnlyMode$.pipe(
-      tap(() => this.firstOffset = { x: 0, y: 0 }),
-      takeUntil(this.destroy$),
-    ).subscribe();
   }
 
   public ngOnDestroy(): void {

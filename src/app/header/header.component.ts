@@ -33,16 +33,13 @@ export class HeaderComponent implements OnDestroy {
   public readonly destroy$ = new Subject();
 
   constructor(private readonly toastService: ToastService) {
-    combineLatest([
-      this.toastService.isFavouriteOnlyMode$,
-      this.toastService.favourites$,
-    ]).pipe(
-      map(([
+    toastService.viewObj$.pipe(
+      map(({
         isFavouriteOnlyMode,
-        favourites
-      ]) => ({
+        hasFavourites
+      }) => ({
         mode: isFavouriteOnlyMode ? Mode.FavouritesOnly : Mode.All,
-        favouritesAvailable: !!favourites?.length,
+        favouritesAvailable: hasFavourites,
       })),
       tap(({ favouritesAvailable }) => (favouritesAvailable ?
         this.modeControl.enable({ emitEvent: false }) :

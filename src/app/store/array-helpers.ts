@@ -1,10 +1,11 @@
 /* eslint-disable */
+export const firstArrayIndex = 0;
 export function shuffle<T>(input: T[]): T[] {
   let currentIndex = input.length; let temporaryValue; let
     randomIndex;
 
   // While there remain elements to shuffle...
-  while (currentIndex !== 0) {
+  while (currentIndex !== firstArrayIndex) {
     // Pick a remaining element...
     randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex -= 1;
@@ -16,4 +17,8 @@ export function shuffle<T>(input: T[]): T[] {
   }
 
   return input;
+}
+
+export function removeFirstElement<T>(input: T[]): T[] {
+  return input.filter((_, index) => index > firstArrayIndex);
 }

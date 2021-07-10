@@ -1,21 +1,34 @@
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { combineLatest } from "rxjs";
 import { Store } from "@ngrx/store";
 import {
   dislikeToast, likeToast, loadToasts, toggleFavouriteMode,
 } from "./store/snuff.actions";
 import * as fromSnuff from "./store/snuff.selectors";
-import { Toast } from "./store/toast";
+import { map } from "rxjs/operators";
+
+const Zero = 0;
 
 @Injectable({
   providedIn: "root",
 })
 export class ToastService {
-  public currentToasts$: Observable<Toast[]> = this.store.select(fromSnuff.selectCurrentToasts);
+  public readonly viewObj$ = combineLatest([
+    this.store.select(fromSnuff.selectCurrentToasts),
+    this.store.select(fromSnuff.selectIsFavouriteOnlyMode),
+    this.store.select(fromSnuff.selectAvailableIds)
+  ]).pipe(
+    map(([
+      displayedToasts,
+      isFavouriteOnlyMode,
+      availableIds
+    ]) => ({
+      displayedToasts,
+      isFavouriteOnlyMode,
+      hasFavourites: availableIds.favouriteIds.length > Zero
+    }))
+  );
 
-  public isFavouriteOnlyMode$: Observable<boolean> = this.store.select(fromSnuff.selectIsFavouriteOnlyMode);
-
-  public favourites$: Observable<number[]> = this.store.select(fromSnuff.selectFavourites);
 
   constructor(
     private store: Store,

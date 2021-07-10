@@ -1,47 +1,49 @@
-import { Action, Store } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import {
   catchError,
-  filter,
+  delay,
   map,
   switchMap,
   tap,
   withLatestFrom,
 } from "rxjs/operators";
 import {
+  addToStack,
+  applicationReady,
   dislikeToast,
   likeToast,
   loadToasts,
   loadToastsFailure,
   loadToastsSuccess,
-  nextIndex,
   setRandomizeOrder,
   toastsAvailable,
+  toggleFavouriteMode,
 } from "./snuff.actions";
-import { selectAvailableToastCount, selectIsFavouriteOnlyMode, selectIsInitialized } from "./snuff.selectors";
+import {
+  selectAvailableIds,
+  selectAvailableToastCount,
+  selectCurrentToastIds,
+  selectIsFavouriteOnlyMode,
+  selectLastlyRemovedToastId
+} from "./snuff.selectors";
 
 import { HapticsService } from "../haptics.service";
-import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Toast } from "./toast";
 import { of } from "rxjs";
-import { shuffle } from "./array-shuffle";
-import { toasts } from "./toasts";
+import { shuffle } from "./array-helpers";
+import { DatabaseService } from "../database.service";
+
+export const targetCardCount = 5;
+const Zero = 0;
 
 @Injectable()
 export class SnuffEffects {
-  public loadToasts$ = createEffect(() => this.actions$.pipe(
+
+  public readonly loadToasts$ = createEffect(() => this.actions$.pipe(
     ofType(loadToasts),
-    withLatestFrom(this.store.select(selectIsInitialized)),
-    map(([
-      ,
-      isInitialized
-    ]) => (isInitialized ? true : toasts)),
-    switchMap((result) => {
-      const actionsToDispatch = typeof (result) === "boolean" ? [] : [loadToastsSuccess({ toasts: result })] as Action[];
-      actionsToDispatch.push(toastsAvailable());
-      return actionsToDispatch;
-    }),
+    switchMap(() => this.databaseService.loadToastsAsync()),
+    switchMap((toasts) => [loadToastsSuccess({ toasts }), applicationReady()]),
     catchError((error) => of(loadToastsFailure({ error }))),
   ));
 
@@ -59,21 +61,58 @@ export class SnuffEffects {
     }),
   ));
 
-  public readonly handleToastConsumption$ = createEffect(() => this.actions$.pipe(
-    ofType(likeToast, dislikeToast),
+  public readonly refillStack$ = createEffect(() => this.actions$.pipe(
+    ofType(likeToast, dislikeToast, applicationReady, toggleFavouriteMode),
     tap(() => this.hapticsService.triggerImpact()),
-    withLatestFrom(this.store.select(selectIsFavouriteOnlyMode)),
-    filter(([
-      { type },
-      isFavouriteOnlyMode
-    ]) => !isFavouriteOnlyMode || type !== dislikeToast.type),
-    map(() => nextIndex()),
+    withLatestFrom(
+      this.store.select(selectIsFavouriteOnlyMode),
+      this.store.select(selectCurrentToastIds),
+      this.store.select(selectAvailableIds),
+      this.store.select(selectLastlyRemovedToastId)
+    ),
+    map(([
+      ,
+      isFavouriteOnlyMode,
+      currentToastIds,
+      {
+        allIds,
+        favouriteIds
+      },
+      lastlyRemovedToastId
+    ]) => {
+      const bannedToastIds = [
+        ...currentToastIds,
+        lastlyRemovedToastId
+      ];
+      let idRepository = (isFavouriteOnlyMode
+        ? favouriteIds
+        : allIds)
+        .filter((toastId) => !bannedToastIds.includes(toastId));
+
+      const pragmaticCardCount = Math.min(targetCardCount, idRepository.length);
+      let remainingToastsToAdd = pragmaticCardCount - currentToastIds.length;
+      const toastsToAdd: string[] = [];
+
+      while (remainingToastsToAdd > Zero) {
+        const randomIndex = Math.floor(Math.random() * idRepository.length);
+        const newToastCandidate = idRepository[randomIndex];
+        idRepository = idRepository.filter((_, index) => index !== randomIndex);
+        if (newToastCandidate !== undefined
+          && toastsToAdd.every((toastId) => (toastId !== newToastCandidate))
+          && currentToastIds.every((toastId) => (toastId !== newToastCandidate))) {
+          toastsToAdd.push(newToastCandidate);
+          remainingToastsToAdd--;
+        }
+      }
+
+      return addToStack({ toastsToAdd });
+    })
   ));
 
   constructor(
     private actions$: Actions,
     private store: Store,
     private hapticsService: HapticsService,
+    private readonly databaseService: DatabaseService
   ) { }
-
 }
