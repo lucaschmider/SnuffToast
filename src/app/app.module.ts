@@ -1,4 +1,4 @@
-import { ActionReducer, MetaReducer, StoreModule } from "@ngrx/store";
+import { StoreModule } from "@ngrx/store";
 import { ArrowLeft, Book, Bookmark } from "angular-feather/icons";
 import { BrowserModule, HammerModule } from "@angular/platform-browser";
 
@@ -7,7 +7,6 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { EffectsModule } from "@ngrx/effects";
 import { FeatherModule } from "angular-feather";
 import { HeaderComponent } from "./header/header.component";
-import { HttpClientModule } from "@angular/common/http";
 import { ModeSwitchComponent } from "./mode-switch/mode-switch.component";
 import { NgModule } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
@@ -16,15 +15,9 @@ import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 import { ToastViewComponent } from "./toast-view/toast-view.component";
 import { environment } from "../environments/environment";
 import { featureKey } from "./store/constants";
-import { localStorageSync } from "ngrx-store-localstorage";
 import { snuffReducer } from "./store/snuff.reducer";
 import { AngularFireModule } from "@angular/fire";
 import { AngularFirestoreModule } from "@angular/fire/firestore";
-
-export function localStorageSyncReducer(reducer: ActionReducer<unknown>): ActionReducer<unknown> {
-  return localStorageSync({ keys: [featureKey], rehydrate: true })(reducer);
-}
-const metaReducers: Array<MetaReducer> = [localStorageSyncReducer];
 
 @NgModule({
   declarations: [
@@ -38,7 +31,7 @@ const metaReducers: Array<MetaReducer> = [localStorageSyncReducer];
     BrowserAnimationsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
-    StoreModule.forRoot({ [featureKey]: snuffReducer }, { metaReducers }),
+    StoreModule.forRoot({ [featureKey]: snuffReducer }),
     EffectsModule.forRoot([SnuffEffects]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
     ReactiveFormsModule,
