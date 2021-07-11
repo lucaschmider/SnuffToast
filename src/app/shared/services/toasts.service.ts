@@ -2,13 +2,13 @@ import { Injectable } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { Toast, ToastDocument } from "src/app/store/toast";
 import { environment } from "src/environments/environment";
-import { Toast, ToastDocument } from "./store/toast";
 
 @Injectable({
   providedIn: "root"
 })
-export class DatabaseService {
+export class ToastsService {
 
   constructor(
     private readonly firestore: AngularFirestore

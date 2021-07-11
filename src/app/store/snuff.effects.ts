@@ -2,7 +2,6 @@ import { Store } from "@ngrx/store";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import {
   catchError,
-  delay,
   map,
   switchMap,
   tap,
@@ -28,11 +27,11 @@ import {
   selectLastlyRemovedToastId
 } from "./snuff.selectors";
 
-import { HapticsService } from "../haptics.service";
+import { HapticsService } from "../shared/services/haptics.service";
 import { Injectable } from "@angular/core";
 import { of } from "rxjs";
 import { shuffle } from "./array-helpers";
-import { DatabaseService } from "../database.service";
+import { ToastsService } from "../shared/services/toasts.service";
 
 export const targetCardCount = 5;
 const Zero = 0;
@@ -42,7 +41,7 @@ export class SnuffEffects {
 
   public readonly loadToasts$ = createEffect(() => this.actions$.pipe(
     ofType(loadToasts),
-    switchMap(() => this.databaseService.loadToastsAsync()),
+    switchMap(() => this.toastsService.loadToastsAsync()),
     switchMap((toasts) => [loadToastsSuccess({ toasts }), applicationReady()]),
     catchError((error) => of(loadToastsFailure({ error }))),
   ));
@@ -113,6 +112,6 @@ export class SnuffEffects {
     private actions$: Actions,
     private store: Store,
     private hapticsService: HapticsService,
-    private readonly databaseService: DatabaseService
+    private readonly toastsService: ToastsService
   ) { }
 }

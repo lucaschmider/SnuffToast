@@ -1,11 +1,11 @@
 import { Component, OnDestroy } from "@angular/core";
-import { Origin, Point } from "./point";
-import { cardStack, firstCardIndex } from "./card-stack";
+import { Origin, Point } from "./shared/models/point";
+import { cardStack, firstCardIndex } from "./shared/card-stack";
 import { tap } from "rxjs/operators";
 
-import { HammerPan, HammerPanEnd, HammerPanEventData } from "./HammerPanEventData";
+import { HammerPan, HammerPanEnd, HammerPanEventData } from "./shared/models/hammer-pan-event-data";
 import { Subject } from "rxjs";
-import { ToastService } from "./toast.service";
+import { ToastViewService } from "./toast-view/toast-view.service";
 
 const safeSpaceRatio = 0.3;
 
@@ -19,14 +19,14 @@ export class AppComponent implements OnDestroy {
   private firstOffset: Point = Origin;
 
   private readonly destroy$ = new Subject();
-  public readonly viewObj$ = this.toastService.viewObj$.pipe(
+  public readonly viewObj$ = this.toastViewService.viewObj$.pipe(
     tap(() => this.firstOffset = Origin)
   );
 
   constructor(
-    private readonly toastService: ToastService
+    private readonly toastViewService: ToastViewService
   ) {
-    toastService.initializeData();
+    toastViewService.initializeData();
   }
 
   public ngOnDestroy(): void {
@@ -63,9 +63,9 @@ export class AppComponent implements OnDestroy {
 
     const directionDefiningThresholdX = 0;
     if (deltaX < directionDefiningThresholdX) {
-      this.toastService.like();
+      this.toastViewService.like();
     } else {
-      this.toastService.dislike();
+      this.toastViewService.dislike();
     }
   }
 }

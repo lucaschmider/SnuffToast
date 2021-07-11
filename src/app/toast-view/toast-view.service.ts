@@ -1,18 +1,16 @@
 import { Injectable } from "@angular/core";
-import { combineLatest } from "rxjs";
 import { Store } from "@ngrx/store";
-import {
-  dislikeToast, likeToast, loadToasts, toggleFavouriteMode,
-} from "./store/snuff.actions";
-import * as fromSnuff from "./store/snuff.selectors";
+import { combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
-
-const Zero = 0;
+import { Zero } from "../shared/constants";
+import { loadToasts, likeToast, dislikeToast, toggleFavouriteMode } from "../store/snuff.actions";
+import * as fromSnuff from "../store/snuff.selectors";
 
 @Injectable({
-  providedIn: "root",
+  providedIn: "root"
 })
-export class ToastService {
+export class ToastViewService {
+
   public readonly viewObj$ = combineLatest([
     this.store.select(fromSnuff.selectCurrentToasts),
     this.store.select(fromSnuff.selectIsFavouriteOnlyMode),

@@ -1,5 +1,5 @@
 import { Component, OnDestroy } from "@angular/core";
-import { Subject, combineLatest } from "rxjs";
+import { Subject } from "rxjs";
 import {
   animate,
   style,
@@ -10,7 +10,7 @@ import { map, takeUntil, tap } from "rxjs/operators";
 
 import { FormControl } from "@angular/forms";
 import { Mode } from "../mode-switch/mode";
-import { ToastService } from "../toast.service";
+import { ToastViewService } from "../toast-view/toast-view.service";
 
 @Component({
   selector: "snuff-header",
@@ -32,8 +32,8 @@ export class HeaderComponent implements OnDestroy {
 
   public readonly destroy$ = new Subject();
 
-  constructor(private readonly toastService: ToastService) {
-    toastService.viewObj$.pipe(
+  constructor(private readonly toastViewService: ToastViewService) {
+    toastViewService.viewObj$.pipe(
       map(({
         isFavouriteOnlyMode,
         hasFavourites
@@ -50,7 +50,7 @@ export class HeaderComponent implements OnDestroy {
     ).subscribe();
 
     this.modeControl.valueChanges.pipe(
-      tap(() => this.toastService.toggleFavouriteOnlyMode()),
+      tap(() => this.toastViewService.toggleFavouriteOnlyMode()),
       takeUntil(this.destroy$),
     ).subscribe();
   }
@@ -61,6 +61,6 @@ export class HeaderComponent implements OnDestroy {
   }
 
   public toggleFavouriteOnlyMode(): void {
-    this.toastService.toggleFavouriteOnlyMode();
+    this.toastViewService.toggleFavouriteOnlyMode();
   }
 }
