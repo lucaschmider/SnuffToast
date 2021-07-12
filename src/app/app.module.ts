@@ -30,7 +30,7 @@ import { AngularFirestoreModule } from "@angular/fire/firestore";
     BrowserModule,
     BrowserAnimationsModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule,
+    AngularFirestoreModule.enablePersistence(),
     StoreModule.forRoot({ [featureKey]: snuffReducer }),
     EffectsModule.forRoot([SnuffEffects]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
