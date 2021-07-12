@@ -4,11 +4,12 @@ import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { Toast, ToastDocument } from "src/app/store/toast";
 import { environment } from "src/environments/environment";
+import { IToastsService } from "./toasts-service.interface";
 
 @Injectable({
   providedIn: "root"
 })
-export class ToastsService {
+export class ToastsService implements IToastsService {
 
   constructor(
     private readonly firestore: AngularFirestore

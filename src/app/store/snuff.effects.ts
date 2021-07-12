@@ -28,10 +28,10 @@ import {
 } from "./snuff.selectors";
 
 import { HapticsService } from "../shared/services/haptics.service";
-import { Injectable } from "@angular/core";
+import { Inject, Injectable } from "@angular/core";
 import { of } from "rxjs";
 import { shuffle } from "./array-helpers";
-import { ToastsService } from "../shared/services/toasts.service";
+import { IToastsService, toastsServiceToken } from "../shared/services/toasts-service.interface";
 
 export const targetCardCount = 5;
 const Zero = 0;
@@ -112,6 +112,6 @@ export class SnuffEffects {
     private actions$: Actions,
     private store: Store,
     private hapticsService: HapticsService,
-    private readonly toastsService: ToastsService
+    @Inject(toastsServiceToken) private readonly toastsService: IToastsService
   ) { }
 }

@@ -18,6 +18,8 @@ import { featureKey } from "./store/constants";
 import { snuffReducer } from "./store/snuff.reducer";
 import { AngularFireModule } from "@angular/fire";
 import { AngularFirestoreModule } from "@angular/fire/firestore";
+import { toastsServiceToken } from "./shared/services/toasts-service.interface";
+import { MockedToastsService } from "./shared/services/mocked-toasts.service";
 
 @NgModule({
   declarations: [
@@ -38,7 +40,10 @@ import { AngularFirestoreModule } from "@angular/fire/firestore";
     FeatherModule.pick({ Book, Bookmark, ArrowLeft }),
     HammerModule,
   ],
-  providers: [],
+  providers: [{
+    provide: toastsServiceToken,
+    useClass: MockedToastsService
+  }],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
